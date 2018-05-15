@@ -13,18 +13,9 @@ const connection = mysql.createConnection({
 
 connection.connect()
 
-connection.query('SELECT * FROM user;', function(err, res) {
-  if (err) {
-    console.log(err)
-  }
-  console.log('打印数据库')
-  console.log(res[0])
-})
-
-connection.end()
 app.get('/api/hello', (req, res) => {
   res.send({
-    express: 'Hello, from Express'
+    userId: 1
   })
 })
 
