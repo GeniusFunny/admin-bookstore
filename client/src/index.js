@@ -1,8 +1,13 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import { render } from 'react-dom';
+import Button from 'material-ui/Button';
 
-ReactDOM.render(<App />, document.getElementById('root'));
-registerServiceWorker();
+function App() {
+  return (
+    <Button variant="raised" color="primary">
+      Hello World
+    </Button>
+  );
+}
+
+render(<App />, document.querySelector('#root'));
