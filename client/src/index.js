@@ -1,13 +1,6 @@
 import React from 'react';
-import { render } from 'react-dom';
-import Button from 'material-ui/Button';
+import ButtonAppBar from './components/ButtonAppBar'
+import { render } from 'react-dom'
 
-function App() {
-  return (
-    <Button variant="raised" color="primary">
-      Hello World
-    </Button>
-  );
-}
 
-render(<App />, document.querySelector('#root'));
+render(<ButtonAppBar />, document.getElementById('root'))
