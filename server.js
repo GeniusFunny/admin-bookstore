@@ -1,22 +1,20 @@
-const express = require('express')
-const mysql = require('mysql')
+const Koa = require('koa')
+// const mysql = require('mysql')
 
-const app = new express()
-const port = process.env.PORT || 5000
-const connection = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: '19980812',
-  database: 'bookstore',
-  port: '3306'
-})
+const app = new Koa();
+// const port = process.env.PORT || 5000
+// const connection = mysql.createConnection({
+// 	host: 'localhost',
+// 	user: 'root',
+// 	password: '19980812',
+//   database: 'bookstore',
+//   port: '3306'
+// });
 
-connection.connect()
+// connection.connect()
 
-app.get('/api/hello', (req, res) => {
-  res.send({
-    userId: 1
-  })
-})
+app.use(async ctx => {
+  ctx.body = 'Hello, World'
+});
 
-app.listen(port, () => console.log(`Listening on port ${port}`))
+app.listen(5000, () => console.log('Listening on port 5000'))
