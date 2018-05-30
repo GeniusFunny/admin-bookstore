@@ -1,19 +1,17 @@
 const Koa = require('koa')
 const Router = require('koa-router')
-// const mysql = require('mysql')
-
+const bodyParser = require('koa-bodyparser')
+const register = require('./server/service/RegisterService')
+const statusFilter = require('./server/utils/statusFiter')
+const test = require('./server/service/TestService')
+const getBookList = require('./server/service/GetBookListService')
+const addBook = require('./server/service/AddBookService')
 const app = new Koa()
 const router = new Router()
-// const port = process.env.PORT || 5000
-// const connection = mysql.createConnection({
-// 	host: 'localhost',
-// 	user: 'root',
-// 	password: '19980812',
-//   database: 'bookstore',
-//   port: '3306'
-// });
+const port = process.env.PORT || 5000
 
-// connection.connect()
+app.use(bodyParser())
+
 app.use(async (ctx, next) => {
   ctx.set('Access-Control-Allow-Origin', '*')
   ctx.set('Access-Control-Allow-Methods', 'GET,PUT,DELETE,POST,OPTIONS')
@@ -23,29 +21,28 @@ app.use(async (ctx, next) => {
   ctx.set('Cache-Control', 'no-cache')
   await next()
 })
+
 router
-  .get('/test', (ctx ,next) => {
+  .post('/register', async (ctx ,next) => {
+    let data = ctx.request.body
+    register(data.username, data.password)
     ctx.body = {
-      name: 'genius',
-      school: 'Xidian'
+      name: 123
     }
   })
+  .get('/test', async (ctx, next) => {
+    ctx.body = await test(1)
+  })
+  .get('/bookList', async (ctx, next) => {
+    ctx.body = await getBookList()
+  })
+  .post('/book', async (ctx, next) => {
+    let data = ctx.request.body
+    ctx.body = await addBook(data.bookname, data.author, data.price)
+  })
+
 app
   .use(router.routes())
   .use(router.allowedMethods())
-
-app.use(async (ctx, next) => {
-  const start = Date.now()
-  await next()
-  const ms = Date.now() - start
-  ctx.set('X-response-Time', `${ms}ms`)
-})
-
-app.use(async (ctx, next) => {
-  const start = Date.now()
-  await next()
-  const ms = Date.now() - start
-  console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
-})
 
 app.listen(5000, () => console.log('Listening on port 5000'))

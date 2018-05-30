@@ -1,1 +1,0 @@
-const loginController = require('./LoginController')

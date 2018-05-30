@@ -59,8 +59,9 @@ const normalMethods = (method, url, data) => {
 /* 包装请求配置 */
 const config_request = (url, method, data, headers = {'Content-Type': 'application/json'}) => {
   if (typeof config_methods[method.toUpperCase()] === 'undefined') {
+    let config = normalMethods(method.toUpperCase(), url, data)
     return {
-      ...normalMethods,
+      ...config,
       headers
     }
   } else {
