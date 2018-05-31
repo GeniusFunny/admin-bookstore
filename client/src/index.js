@@ -1,6 +1,6 @@
 import React from 'react';
-import ButtonAppBar from './components/ButtonAppBar'
+import App from './App'
 import { render } from 'react-dom'
 
 
-render(<ButtonAppBar />, document.getElementById('root'))
+render(<App />, document.getElementById('root'))

@@ -7,11 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import {Test, Register, GetBookList, AddBook} from "../api/Api";
-
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
     flex: 1,
@@ -20,32 +18,12 @@ const styles = {
     marginLeft: -12,
     marginRight: 20,
   },
-};
-async function test() {
-  const res = await Test()
-  return res
-}
-async function register() {
-  const res = await Register({username: 'genius', password: '19980812'})
-  console.log(res)
-  return res
-}
-async function getBookList() {
-  const res = await GetBookList()
-  console.log(res)
-  return res
-}
-async function addBook() {
-  const res = await AddBook({bookname: '黑客与画家', author: '阮一峰', price: 59})
-  console.log(res)
-  return res
+  appName: {
+    fontSize: 16 + 'px'
+  }
 }
 const ButtonAppBar = (props)  => {
-  const { classes } = props;
-  // test()
-  // register()
-  // getBookList()
-  // addBook()
+  const { classes } = props
   return (
     <div className={classes.root}>
       <AppBar>
@@ -54,7 +32,7 @@ const ButtonAppBar = (props)  => {
             <MenuIcon />
           </IconButton>
           <Typography variant="title" color="inherit" className={classes.flex}>
-            Title
+            <span className={classes.appName}>一个书店</span>
           </Typography>
           <Button color="inherit">Login</Button>
         </Toolbar>
