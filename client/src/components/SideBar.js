@@ -6,8 +6,9 @@ import {Drawer, AppBar, Toolbar, Typography, IconButton} from '@material-ui/core
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import RegisterForm from '../containers/RegisterForm'
+// import RegisterForm from '../containers/RegisterForm'
 import NavList from './List'
+import BookList from '../containers/BookList'
 
 const drawerWidth = 240
 
@@ -130,7 +131,7 @@ class SideBar extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <RegisterForm/>
+          <BookList/>
         </main>
       </div>
     )

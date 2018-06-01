@@ -17,10 +17,16 @@ const sql = {
     SELECT *
     FROM book_info
     WHERE bookid=?
+  `,
+  search: `
+    SELECT *
+    FROM book
+    WHERE bookname like ? or author like ?
   `
 }
 
 async function getBookListDao () {
+  console.log(123)
   let data = await query(sql.getList)
   return data
 }
@@ -43,11 +49,16 @@ async function getBookInfoDao(bookid) {
   let data = await query(sql.info, bookid)
   return data
 }
-exports.insertBookDao = insertBookDao
-exports = {
-  getBookListDao: getBookListDao,
-  insertBookDao: insertBookDao,
-  deleteBookDao: deleteBookDao,
-  getBookInfoDao: getBookInfoDao
+async function searchBookDao(bookname, author) {
+  let source = []
+  source.push(bookname)
+  source.push(author)
+  let data = await query(sql.search, source)
+  return data
 }
+exports.insertBookDao = insertBookDao
+exports.getBookListDao = getBookListDao
+exports.deleteBookDao = deleteBookDao
+exports.getBookInfoDao = getBookInfoDao
+exports.seacrchBookDao = searchBookDao
 

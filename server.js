@@ -6,6 +6,7 @@ const statusFilter = require('./server/utils/statusFiter')
 const test = require('./server/service/TestService')
 const getBookList = require('./server/service/GetBookListService')
 const addBook = require('./server/service/AddBookService')
+const searchBook = require('./server/service/SearchBookService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -35,6 +36,9 @@ router
   })
   .get('/bookList', async (ctx, next) => {
     ctx.body = await getBookList()
+  })
+  .get('/book', async (ctx, next) => {
+    ctx.body = await searchBook(ctx.request.query.keyword, ctx.request.query.keyword)
   })
   .post('/book', async (ctx, next) => {
     let data = ctx.request.body

@@ -11,9 +11,13 @@ const GetBookList = () => {
 const AddBook = (data) => {
   return ajax('book', 'post', data)
 }
+const SearchBook = (data) => {
+  return ajax('book', 'get', data)
+}
 export {
   Test,
   Register,
   GetBookList,
-  AddBook
+  AddBook,
+  SearchBook
 }
