@@ -14,10 +14,30 @@ const AddBook = (data) => {
 const SearchBook = (data) => {
   return ajax('book', 'get', data)
 }
+const AddBookToCourt = (data) => {
+  return ajax('court/add', 'put', data)
+}
+const DeleteBookFromCourt = (data) => {
+  return ajax('court/delete', 'delete', data)
+}
+const Purchase = (data) => {
+  return ajax('court/purchase', 'get', data)
+}
+const GetBooksInCourt = (data) => {
+  return ajax('court/book', 'get', data)
+}
+const Login = (data) => {
+  return ajax('login', 'post', data)
+}
 export {
   Test,
   Register,
   GetBookList,
   AddBook,
-  SearchBook
+  SearchBook,
+  AddBookToCourt,
+  GetBooksInCourt,
+  DeleteBookFromCourt,
+  Purchase,
+  Login
 }

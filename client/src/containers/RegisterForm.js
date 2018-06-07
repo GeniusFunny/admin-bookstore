@@ -38,7 +38,7 @@ const styles = {
     padding: 30 + 'px'
   },
   label: {
-    fontSize: 14 + 'px',
+    fontSize: 12 + 'px',
     color: '#a1a1a1',
     fontWeight: 200,
     marginRight: 20 + 'px'
@@ -76,22 +76,13 @@ export default class RegisterForm extends Component {
   constructor(props) {
     super(props)
     this.form = {
-      username: (value = '') => (
-        {
-          name: '用户名',
-          value: value,
-          type: 'text',
-          id: 'username',
-          maxLength: 12
-        }
-      ),
       password: (value = '') =>  (
         {
           name: '密码',
           value: value,
           type: 'password',
           id: 'password',
-          maxLength: 12
+          maxLength: 16
         }
       ),
       phone: (value = '') => (
@@ -105,9 +96,8 @@ export default class RegisterForm extends Component {
       )
     }
     this.state = {
-      username: this.form.username(),
-      password: this.form.password(),
       phone: this.form.phone(),
+      password: this.form.password(),
       isAgree: true
     }
   }
@@ -129,9 +119,8 @@ export default class RegisterForm extends Component {
     })
   }
   getInfo = () => ({
-    username: this.state.username.value,
     password: this.state.password.value,
-    phone: this.state.phone.value
+    phone: parseInt(this.state.phone.value)
   })
   render() {
     return (
@@ -143,13 +132,20 @@ export default class RegisterForm extends Component {
         <div style={styles.body}>
           <div style={styles.form}>
             <div>
-              <BSInput data={this.state.username} changeInputValue={(key, value) => this.changeInputValue(key, value)}/><label style={styles.label}>（用户名由4～12英文字母或中文汉字组成）</label>
+              <BSInput
+                data={this.state.phone}
+                changeInputValue={(key, value) => this.changeInputValue(key, value)}
+                width={250}
+              />
+              <label style={styles.label}>（手机号将作为登录名使用）</label>
             </div>
             <div>
-              <BSInput data={this.state.password} changeInputValue={(key, value) => this.changeInputValue(key, value)}/><label style={styles.label}>（密码由6～12英文字母或阿拉伯数字组成）</label>
-            </div>
-            <div>
-              <BSInput data={this.state.phone} changeInputValue={(key, value) => this.changeInputValue(key, value)}/><label style={styles.label}>（手机号将作为登录名使用）</label>
+              <BSInput
+                data={this.state.password}
+                changeInputValue={(key, value) => this.changeInputValue(key, value)}
+                width={250}
+              />
+              <label style={styles.label}>（密码由6～16英文字母或阿拉伯数字组成）</label>
             </div>
             <div style={styles.option.container}>
               <Button

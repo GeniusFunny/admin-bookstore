@@ -20,8 +20,7 @@ const bsInput = (props) => {
   function bindInputChange(e) {
     props.changeInputValue(e.target.id, e.target.value)
   }
-  const {classes} = props
-  const data = props.data
+  const {classes, data, width} = props
   return (
     <FormControl className={classes.root}>
       <InputLabel
@@ -35,6 +34,7 @@ const bsInput = (props) => {
         type={data.type}
         onInput={bindInputChange}
         id={data.id}
+        style={{width: width}}
       />
     </FormControl>
   )

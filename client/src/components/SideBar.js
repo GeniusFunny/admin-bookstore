@@ -2,13 +2,14 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {withStyles} from '@material-ui/core/styles'
-import {Drawer, AppBar, Toolbar, Typography, IconButton} from '@material-ui/core'
+import {Drawer, AppBar, Toolbar, Typography, IconButton, Button} from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-// import RegisterForm from '../containers/RegisterForm'
+import RegisterForm from '../containers/RegisterForm'
 import NavList from './List'
 import BookList from '../containers/BookList'
+import Login from '../containers/LoginForm'
 
 const drawerWidth = 240
 
@@ -75,7 +76,7 @@ const styles =  theme => ({
   },
   content: {
     flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
+    background:'linear-gradient(135deg, #edd5d1 5%, #e9edf3 15%)',
   }
 })
 
@@ -131,7 +132,9 @@ class SideBar extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <BookList/>
+          {/*<BookList/>*/}
+          {/*<RegisterForm/>*/}
+          <Login/>
         </main>
       </div>
     )

@@ -1,9 +1,9 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
-import {Grid, Button, Typography} from '@material-ui/core'
+import {LinearProgress} from '@material-ui/core'
 import Search from '../components/Search'
-import {GetBookList, SearchBook} from '../api/Api'
+import {GetBookList, SearchBook, AddBookToCourt} from '../api/Api'
 import Book from '../components/Book'
 const styles = (theme) => ({
   root: {
@@ -23,7 +23,8 @@ class BookList extends Component {
     super(props)
     this.state = {
       bookList: [],
-      keyWord: ''
+      keyWord: '',
+      loading: true
     }
   }
   render() {
@@ -31,12 +32,24 @@ class BookList extends Component {
     return (
       <div>
         <header className={classes.header}>
-          <Search data='可输入书名、作者进行搜索' keyWord={this.state.keyWord} changeKeyWord= {value => this.bindKeyWordChange(value)} clickSearch={() => this.searchClick()}/>
+          <Search
+            data='可输入书名、作者进行搜索'
+            keyWord={this.state.keyWord}
+            changeKeyWord= {value => this.bindKeyWordChange(value)}
+            clickSearch={() => this.searchClick()}
+          />
+          <LinearProgress value="0" hidden={!this.state.loading}/>
         </header>
-        <div className={classes.body}>
+        <div
+          className={classes.body}
+        >
           {
             this.state.bookList.map((item, index) => {
-              return <Book data={item} key={index}/>
+              return <Book
+                data={item}
+                key={index}
+                addBookToCourt={bookid => this.addBookToCourt(bookid)}
+              />
             })
           }
         </div>
@@ -48,11 +61,21 @@ class BookList extends Component {
       keyWord: value
     })
   }
+  addBookToCourt = (bookId) => {
+    AddBookToCourt({bookId: bookId})
+      .then(res => {
+        console.log(res.data)
+      })
+  }
   searchClick = () => {
+    this.setState({
+      loading: true
+    })
     SearchBook({keyword: this.state.keyWord})
       .then(data => {
         this.setState({
-          bookList: data
+          bookList: data,
+          loading: false
         })
       })
   }
@@ -63,7 +86,8 @@ class BookList extends Component {
   parseBookList = async () => {
     let data = await this.getBookList()
     this.setState({
-      bookList: data
+      bookList: data,
+      loading: false
     })
   }
   componentDidMount() {

@@ -1,6 +1,6 @@
 import React from 'react'
 import {withStyles} from '@material-ui/core/styles'
-import {Card, CardActions, CardContent, CardHeader, CardMedia, Typography, IconButton} from '@material-ui/core'
+import {Card, CardActions, CardContent, CardMedia, Typography, IconButton} from '@material-ui/core'
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart'
 import Info from '@material-ui/icons/InfoOutline'
 import PropTypes from 'prop-types'
@@ -35,6 +35,12 @@ const styles = (theme) => ({
 })
 
 const Book = (props) => {
+  function courtIconClick(e) {
+    console.log(e.target.id)
+    if (e.target.id) {
+      props.addBookToCourt(parseInt(e.target.id))
+    }
+  }
   const {classes, data} = props
   return (
     <div className={classes.root}>
@@ -47,18 +53,32 @@ const Book = (props) => {
           title={data.bookname}
         />
         <CardContent className={classes.cardContent}>
-          <Typography component='h2' className={classes.cardContentTitle}>
+          <Typography
+            component='h2'
+            className={classes.cardContentTitle}
+          >
             {data.bookname}---{data.author}
           </Typography>
-          <Typography component='p' className={classes.cardContentPrice}>
+          <Typography
+            component='p'
+            className={classes.cardContentPrice}
+          >
             ¥{data.price}.00
           </Typography>
         </CardContent>
-        <CardActions className={classes.cardActions}>
+        <CardActions
+          className={classes.cardActions}
+        >
           <IconButton>
-            <AddShoppingCart color="secondary"/>
+            <AddShoppingCart
+              color="secondary"
+              onClick={courtIconClick}
+              id={data.bookid}
+            />
           </IconButton>
-          <IconButton color="primary">
+          <IconButton
+            color="primary"
+          >
             <Info/>
           </IconButton>
         </CardActions>

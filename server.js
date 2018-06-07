@@ -1,12 +1,17 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const bodyParser = require('koa-bodyparser')
-const register = require('./server/service/RegisterService')
+const register = require('./server/service/user/RegisterService')
 const statusFilter = require('./server/utils/statusFiter')
 const test = require('./server/service/TestService')
-const getBookList = require('./server/service/GetBookListService')
-const addBook = require('./server/service/AddBookService')
-const searchBook = require('./server/service/SearchBookService')
+const getBookList = require('./server/service/book/GetBookListService')
+const addBook = require('./server/service/book/AddBookService')
+const searchBook = require('./server/service/book/SearchBookService')
+const addToCourt = require('./server/service/court/AddBookToCourt')
+const deleteBook = require('./server/service/court/DeleteBookService')
+const getCourt = require('./server/service/court/GetCourtService')
+const purchase = require('./server/service/court/PurchaseService')
+const login = require('./server/service/user/LoginService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -24,11 +29,21 @@ app.use(async (ctx, next) => {
 })
 
 router
-  .post('/register', async (ctx ,next) => {
+  .post('/register', async (ctx, next) => {
     let data = ctx.request.body
-    register(data.username, data.password)
-    ctx.body = {
-      name: 123
+    ctx.body = await register(data.phone, data.password)
+  })
+  .post('/login', async (ctx, next) => {
+    let data = ctx.request.body
+    ctx.body = await login(data.username, data.password)
+    if (ctx.body.status === 0) {
+      ctx.cookies.set('cid', ctx.body.data.userId, {
+        domain: 'localhost:3000',
+        path: '/login',
+        maxAge: 2 * 3600 * 1000,
+        httpOnly: true,
+        overwrite: false
+      })
     }
   })
   .get('/test', async (ctx, next) => {
@@ -43,6 +58,11 @@ router
   .post('/book', async (ctx, next) => {
     let data = ctx.request.body
     ctx.body = await addBook(data.bookname, data.author, data.price)
+  })
+  .put('/court/add', async (ctx, next) => {
+    let data = ctx.request.body
+    console.log(data.bookId)
+    ctx.body = await addToCourt(99, data.bookId)
   })
 
 app

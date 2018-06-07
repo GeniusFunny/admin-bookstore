@@ -1,4 +1,4 @@
-const getBookListDao = require('../dao/book').getBookListDao
+const getBookListDao = require('../../dao/book').getBookListDao
 
 console.log(getBookListDao)
 async function getBookListService() {
