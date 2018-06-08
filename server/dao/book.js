@@ -13,29 +13,43 @@ const sql = {
     DELETE FROM book
     WHERE bookid=?
   `,
-  info: `
-    SELECT *
-    FROM book_info
-    WHERE bookid=?
-  `,
   search: `
     SELECT *
     FROM book
     WHERE bookname like ? or author like ?
+  `,
+  find: `
+    SELECT *
+    FROM book
+    WHERE bookid=?
   `
 }
 
 async function getBookListDao () {
-  console.log(123)
-  let data = await query(sql.getList)
+  return await query(sql.getList)
+}
+
+async function getBookDao (bookId) {
+  let source = [bookId]
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    let res = await query(sql.find, source)
+    data = {
+      status: 0,
+      message: 'SUCCESS',
+      data: res
+    }
+  } catch (e) {
+    console.error(e, '查询失败')
+  }
   return data
 }
 
 async function insertBookDao(bookname, author, price) {
-  let source = []
-  source.push(bookname)
-  source.push(author)
-  source.push(price)
+  let source = [bookname, author, price]
   let data = await query(sql.insert, source)
   return data
 }
@@ -45,20 +59,15 @@ async function deleteBookDao(bookid) {
   return data
 }
 
-async function getBookInfoDao(bookid) {
-  let data = await query(sql.info, bookid)
-  return data
-}
 async function searchBookDao(bookname, author) {
-  let source = []
-  source.push(bookname)
-  source.push(author)
+  let source = [bookname, author]
   let data = await query(sql.search, source)
   return data
 }
+
 exports.insertBookDao = insertBookDao
 exports.getBookListDao = getBookListDao
 exports.deleteBookDao = deleteBookDao
-exports.getBookInfoDao = getBookInfoDao
 exports.seacrchBookDao = searchBookDao
+exports.getBookDao = getBookDao
 

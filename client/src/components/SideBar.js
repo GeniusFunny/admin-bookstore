@@ -9,6 +9,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import RegisterForm from '../containers/RegisterForm'
 import NavList from './List'
 import BookList from '../containers/BookList'
+import {GetBooksInCourt} from '../api/Api'
 import Login from '../containers/LoginForm'
 
 const drawerWidth = 240
@@ -94,6 +95,7 @@ class SideBar extends Component {
   }
 
   render() {
+    GetBooksInCourt()
     const { classes, theme } = this.props
 
     return (
@@ -132,9 +134,9 @@ class SideBar extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          {/*<BookList/>*/}
+          <BookList/>
           {/*<RegisterForm/>*/}
-          <Login/>
+          {/*<Login/>*/}
         </main>
       </div>
     )

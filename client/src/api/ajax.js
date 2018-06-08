@@ -96,6 +96,7 @@ const makeRequest = (config) => {
     }
     if (xhr) {
       xhr.open(config.method, config.url)
+      xhr.withCredentials = true
       xhr.onload = () => {
         if (xhr.status >= 200 || xhr.status < 300) {
           try {

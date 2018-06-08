@@ -16,10 +16,20 @@ const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
 
+const urlIsPublic= (url, method) => {
+  if (method === 'OPTIONS') {
+    return true
+  }
+  if (method !== 'GET') {
+    return (url === '/login' || url === '/register')
+  } else {
+    return url.indexOf('court') === -1
+  }
+}
 app.use(bodyParser())
 
 app.use(async (ctx, next) => {
-  ctx.set('Access-Control-Allow-Origin', '*')
+  ctx.set('Access-Control-Allow-Origin', 'http://localhost:3000')
   ctx.set('Access-Control-Allow-Methods', 'GET,PUT,DELETE,POST,OPTIONS')
   ctx.set('Access-Control-Max-Age', 3600 * 24)
   ctx.set('Access-Control-Allow-Credentials', true)
@@ -27,7 +37,24 @@ app.use(async (ctx, next) => {
   ctx.set('Cache-Control', 'no-cache')
   await next()
 })
-
+  .use(async (ctx, next) => {
+    if (urlIsPublic(ctx.request.url, ctx.request.method)) {
+      await next()
+    } else {
+      let userId
+      try {
+        userId = ctx.request.header.cookie.split(';').find((item) => item.indexOf('userId') !== -1).split('=')[1]
+      } catch (e) {
+        userId = 0
+      }
+      if (userId) {
+        ctx.request.userId = userId
+        await next()
+      } else {
+        ctx.status = 401
+      }
+    }
+  })
 router
   .post('/register', async (ctx, next) => {
     let data = ctx.request.body
@@ -37,12 +64,8 @@ router
     let data = ctx.request.body
     ctx.body = await login(data.username, data.password)
     if (ctx.body.status === 0) {
-      ctx.cookies.set('cid', ctx.body.data.userId, {
-        domain: 'localhost:3000',
-        path: '/login',
-        maxAge: 2 * 3600 * 1000,
-        httpOnly: true,
-        overwrite: false
+      ctx.cookies.set('userId', `${ctx.body.data.userId}`, {
+        maxAge: 7 * 24 * 3600 * 1000
       })
     }
   })
@@ -61,12 +84,14 @@ router
   })
   .put('/court/add', async (ctx, next) => {
     let data = ctx.request.body
-    console.log(data.bookId)
-    ctx.body = await addToCourt(99, data.bookId)
+    ctx.body = await addToCourt(ctx.request.userId, data.bookId)
+  })
+  .get('/court/list', async (ctx, next) => {
+    ctx.body = await getCourt(ctx.request.userId)
   })
 
 app
   .use(router.routes())
   .use(router.allowedMethods())
 
-app.listen(5000, () => console.log('Listening on port 5000'))
+app.listen(port, () => console.log('Listening on port 5000'))

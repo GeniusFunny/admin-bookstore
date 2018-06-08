@@ -11,7 +11,11 @@ const styles = (theme) => ({
   },
   card: {
     width: 250,
-    height: 350
+    height: 350,
+    display: 'flex',
+    paddingTop: 40,
+    paddingLeft: 30,
+    flexFlow: 'column nowrap',
   },
   media: {
     height: 200,
@@ -27,9 +31,11 @@ const styles = (theme) => ({
   cardContentPrice: {
     fontSize: '18px',
     color: 'red',
-    textAlign: 'center'
+    textAlign: 'center',
+    marginTop:10
   },
   cardContentTitle: {
+    marginTop: 10,
     fontSize: '12px'
   }
 })

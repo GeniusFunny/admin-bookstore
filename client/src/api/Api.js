@@ -23,8 +23,8 @@ const DeleteBookFromCourt = (data) => {
 const Purchase = (data) => {
   return ajax('court/purchase', 'get', data)
 }
-const GetBooksInCourt = (data) => {
-  return ajax('court/book', 'get', data)
+const GetBooksInCourt = () => {
+  return ajax('court/list', 'get')
 }
 const Login = (data) => {
   return ajax('login', 'post', data)
