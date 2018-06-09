@@ -12,6 +12,7 @@ const deleteBook = require('./server/service/court/DeleteBookService')
 const getCourt = require('./server/service/court/GetCourtService')
 const purchase = require('./server/service/court/PurchaseService')
 const login = require('./server/service/user/LoginService')
+const getBookInfo = require('./server/service/book/GetBookService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -69,25 +70,32 @@ router
       })
     }
   })
-  .get('/test', async (ctx, next) => {
+  .get('/test', async (ctx) => {
     ctx.body = await test(1)
   })
-  .get('/bookList', async (ctx, next) => {
+  .get('/bookList', async (ctx) => {
     ctx.body = await getBookList()
   })
-  .get('/book', async (ctx, next) => {
+  .get('/book', async (ctx) => {
     ctx.body = await searchBook(ctx.request.query.keyword, ctx.request.query.keyword)
   })
-  .post('/book', async (ctx, next) => {
+  .post('/book', async (ctx) => {
     let data = ctx.request.body
     ctx.body = await addBook(data.bookname, data.author, data.price)
   })
-  .put('/court/add', async (ctx, next) => {
+  .put('/court/add', async (ctx) => {
     let data = ctx.request.body
+    console.log(data)
     ctx.body = await addToCourt(ctx.request.userId, data.bookId)
   })
-  .get('/court/list', async (ctx, next) => {
-    ctx.body = await getCourt(ctx.request.userId)
+  .get('/book/info', async (ctx) => {
+    ctx.body = {
+      name: 123
+    }
+  })
+  .get('/court/list', async (ctx) => {
+    let res = await getCourt(ctx.request.userId)
+    ctx.body = res
   })
 
 app

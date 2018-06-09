@@ -11,6 +11,7 @@ import NavList from './List'
 import BookList from '../containers/BookList'
 import {GetBooksInCourt} from '../api/Api'
 import Login from '../containers/LoginForm'
+import Court from '../containers/Court'
 
 const drawerWidth = 240
 
@@ -134,7 +135,8 @@ class SideBar extends Component {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <BookList/>
+          {/*<BookList/>*/}
+          <Court/>
           {/*<RegisterForm/>*/}
           {/*<Login/>*/}
         </main>

@@ -62,7 +62,7 @@ async function addBookToCourt(userId, bookId) {
         message: 'SUCCESS'
       }
     } catch (e) {
-      console.error('插入失败')
+      console.error('插入失败', e)
     }
   }
   return data

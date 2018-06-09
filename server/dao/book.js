@@ -40,7 +40,7 @@ async function getBookDao (bookId) {
     data = {
       status: 0,
       message: 'SUCCESS',
-      data: res
+      data: res[0]
     }
   } catch (e) {
     console.error(e, '查询失败')

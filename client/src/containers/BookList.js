@@ -5,6 +5,7 @@ import {LinearProgress} from '@material-ui/core'
 import Search from '../components/Search'
 import {GetBookList, SearchBook, AddBookToCourt} from '../api/Api'
 import Book from '../components/Book'
+import Message from '../components/Message'
 const styles = (theme) => ({
   root: {
 
@@ -21,16 +22,39 @@ const styles = (theme) => ({
 class BookList extends Component {
   constructor(props) {
     super(props)
+    this.messageMap = {
+      'success': () => ({
+        open: true,
+        message: '成功加入购物车',
+        type: 'success'
+      }),
+      'error': () => ({
+        open: true,
+        message: '加入购物车失败',
+        type: 'error'
+      })
+    }
     this.state = {
       bookList: [],
       keyWord: '',
-      loading: true
+      loading: true,
+      Message: {
+        open: false,
+        message: '加入购物车成功',
+        type: 'success'
+      }
     }
   }
   render() {
     const {classes} = this.props
     return (
       <div>
+        <Message
+          message={this.state.Message.message}
+          type={this.state.Message.type}
+          open={this.state.Message.open}
+          close={() => this.messageClose()}
+        />
         <header className={classes.header}>
           <Search
             data='可输入书名、作者进行搜索'
@@ -56,6 +80,14 @@ class BookList extends Component {
       </div>
     )
   }
+  messageClose = () => {
+    this.setState({
+      Message: {
+        ...this.state.Message,
+        open: false
+      }
+    })
+  }
   bindKeyWordChange = (value) => {
     this.setState({
       keyWord: value
@@ -63,8 +95,16 @@ class BookList extends Component {
   }
   addBookToCourt = (bookId) => {
     AddBookToCourt({bookId: bookId})
-      .then(res => {
-        console.log(res.data)
+      .then((res) => {
+        if (res.status === 0) {
+          this.setState({
+            Message: this.messageMap['success']()
+          })
+        } else {
+          this.setState({
+            Message: this.messageMap['error']()
+          })
+        }
       })
   }
   searchClick = () => {

@@ -41,13 +41,10 @@ const styles = (theme) => ({
 })
 
 const Book = (props) => {
-  function courtIconClick(e) {
-    console.log(e.target.id)
-    if (e.target.id) {
-      props.addBookToCourt(parseInt(e.target.id))
-    }
-  }
   const {classes, data} = props
+  function courtIconClick() {
+    props.addBookToCourt(data.bookid)
+  }
   return (
     <div className={classes.root}>
       <Card
@@ -79,14 +76,13 @@ const Book = (props) => {
             <AddShoppingCart
               color="secondary"
               onClick={courtIconClick}
-              id={data.bookid}
             />
           </IconButton>
-          <IconButton
-            color="primary"
-          >
-            <Info/>
-          </IconButton>
+          {/*<IconButton*/}
+            {/*color="primary"*/}
+          {/*>*/}
+            {/*<Info/>*/}
+          {/*</IconButton>*/}
         </CardActions>
       </Card>
     </div>
