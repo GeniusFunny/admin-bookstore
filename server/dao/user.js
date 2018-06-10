@@ -12,7 +12,7 @@ const sql = {
   `,
   edit: `
     UPDATE user SET password=?
-    WHERE userid=?
+    WHERE userId=?
   `
 }
 

@@ -1,10 +1,9 @@
 import React from 'react'
-import SideBar from './components/SideBar'
-// import Test from './components/test'
+import Index from './containers/Nav'
 
 const  App = () => {
   return (
-    <SideBar/>
+    <Index/>
   )
 }
 

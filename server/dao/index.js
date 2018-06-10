@@ -16,7 +16,7 @@ async function testDao (userId) {
   let sql = `
     SELECT username, age
     FROM userInfo
-    Where userid=?
+    Where userId=?
   `
   let data = await query(sql, userId)
   return data

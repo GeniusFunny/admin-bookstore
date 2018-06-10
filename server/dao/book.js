@@ -11,7 +11,7 @@ const sql = {
   `,
   delete: `
     DELETE FROM book
-    WHERE bookid=?
+    WHERE bookId=?
   `,
   search: `
     SELECT *
@@ -21,7 +21,7 @@ const sql = {
   find: `
     SELECT *
     FROM book
-    WHERE bookid=?
+    WHERE bookId=?
   `
 }
 
@@ -54,8 +54,8 @@ async function insertBookDao(bookname, author, price) {
   return data
 }
 
-async function deleteBookDao(bookid) {
-  let data = await query(sql.delete, bookid)
+async function deleteBookDao(bookId) {
+  let data = await query(sql.delete, bookId)
   return data
 }
 

@@ -13,6 +13,7 @@ const getCourt = require('./server/service/court/GetCourtService')
 const purchase = require('./server/service/court/PurchaseService')
 const login = require('./server/service/user/LoginService')
 const getBookInfo = require('./server/service/book/GetBookService')
+const editBookCourtCount = require('./server/service/court/EditBookCourtCount')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -85,7 +86,6 @@ router
   })
   .put('/court/add', async (ctx) => {
     let data = ctx.request.body
-    console.log(data)
     ctx.body = await addToCourt(ctx.request.userId, data.bookId)
   })
   .get('/book/info', async (ctx) => {
@@ -94,8 +94,13 @@ router
     }
   })
   .get('/court/list', async (ctx) => {
-    let res = await getCourt(ctx.request.userId)
-    ctx.body = res
+    ctx.body = await getCourt(ctx.request.userId)
+  })
+  .post('/court/book', async (ctx) => {
+    ctx.body = await editBookCourtCount(ctx.request.body.count, ctx.request.userId, ctx.request.body.bookId)
+  })
+  .delete('/court/book', async (ctx) => {
+    ctx.body = await deleteBook(ctx.request.userId, ctx.request.body.bookId)
   })
 
 app

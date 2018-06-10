@@ -1,10 +1,10 @@
 const getCourtDao = require('../../dao/court').getCourtDao
 const getBookService = require('../book/GetBookService')
 
-async function getCourtService(userid) {
+async function getCourtService(userId) {
   let res
   try {
-    let courtList = await getCourtDao(userid)
+    let courtList = await getCourtDao(userId)
     try {
       res = {
         status: 0,
@@ -12,7 +12,7 @@ async function getCourtService(userid) {
         data: []
       }
       for (let item of courtList.data) {
-        let data = await getBookService(item.bookid)
+        let data = await getBookService(item.bookId)
         data.data.count = item.count
         res.data.push(data.data)
       }

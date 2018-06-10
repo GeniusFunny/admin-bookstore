@@ -1,7 +1,7 @@
 const purchaseDao = require('../../dao/court').purchaseDao
 
-async function purchaseServiece(userid) {
-  let data = await purchaseDao(userid)
+async function purchaseServiece(userId) {
+  let data = await purchaseDao(userId)
   return data
 }
 

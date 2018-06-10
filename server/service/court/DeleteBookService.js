@@ -1,7 +1,7 @@
 const deleteBookDao = require('../../dao/court').deleteBookDao
 
-async function deleteBookService(userid, bookid) {
-  let data = await deleteBookDao()
-  return data
+async function deleteBookService(userId, bookId) {
+  console.log(userId, bookId)
+  return await deleteBookDao(userId, bookId)
 }
 module.exports = deleteBookService

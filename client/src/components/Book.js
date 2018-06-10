@@ -43,7 +43,7 @@ const styles = (theme) => ({
 const Book = (props) => {
   const {classes, data} = props
   function courtIconClick() {
-    props.addBookToCourt(data.bookid)
+    props.addBookToCourt(data.bookId)
   }
   return (
     <div className={classes.root}>

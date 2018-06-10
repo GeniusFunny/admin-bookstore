@@ -72,7 +72,7 @@ class BookList extends Component {
               return <Book
                 data={item}
                 key={index}
-                addBookToCourt={bookid => this.addBookToCourt(bookid)}
+                addBookToCourt={bookId => this.addBookToCourt(bookId)}
               />
             })
           }

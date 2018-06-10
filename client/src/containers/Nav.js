@@ -2,16 +2,14 @@ import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {withStyles} from '@material-ui/core/styles'
-import {Drawer, AppBar, Toolbar, Typography, IconButton, Button} from '@material-ui/core'
+import {BrowserRouter as Router, Route} from 'react-router-dom'
+import {Drawer, AppBar, Toolbar, Typography, IconButton} from '@material-ui/core'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
-import RegisterForm from '../containers/RegisterForm'
-import NavList from './List'
-import BookList from '../containers/BookList'
+import NavList from '../components/List'
+import Routes from '../route'
 import {GetBooksInCourt} from '../api/Api'
-import Login from '../containers/LoginForm'
-import Court from '../containers/Court'
 
 const drawerWidth = 240
 
@@ -82,7 +80,7 @@ const styles =  theme => ({
   }
 })
 
-class SideBar extends Component {
+class Nav extends Component {
   state = {
     open: false,
   }
@@ -100,55 +98,58 @@ class SideBar extends Component {
     const { classes, theme } = this.props
 
     return (
-      <div className={classes.root}>
-        <AppBar
-          position="absolute"
-          className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
-        >
-          <Toolbar disableGutters={!this.state.open}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={this.handleDrawerOpen}
-              className={classNames(classes.menuButton, this.state.open && classes.hide)}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="title" color="inherit" noWrap style={{fontSize: '18px', fontWeight: 300}}>
-              前端杂货铺
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          variant="permanent"
-          classes={{
-            paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
-          }}
-          open={this.state.open}
-        >
-          <div className={classes.toolbar}>
-            <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
-          </div>
-          <NavList/>
-        </Drawer>
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          {/*<BookList/>*/}
-          <Court/>
-          {/*<RegisterForm/>*/}
-          {/*<Login/>*/}
-        </main>
-      </div>
+      <Router>
+        <div className={classes.root}>
+          <AppBar
+            position="absolute"
+            className={classNames(classes.appBar, this.state.open && classes.appBarShift)}
+          >
+            <Toolbar disableGutters={!this.state.open}>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={this.handleDrawerOpen}
+                className={classNames(classes.menuButton, this.state.open && classes.hide)}
+              >
+                <MenuIcon />
+              </IconButton>
+              <Typography variant="title" color="inherit" noWrap style={{fontSize: '18px', fontWeight: 300}}>
+                前端杂货铺
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            variant="permanent"
+            classes={{
+              paper: classNames(classes.drawerPaper, !this.state.open && classes.drawerPaperClose),
+            }}
+            open={this.state.open}
+          >
+            <div className={classes.toolbar}>
+              <IconButton onClick={this.handleDrawerClose}>
+                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+              </IconButton>
+            </div>
+            <NavList list={[]}/>
+          </Drawer>
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            {
+              Routes.map(item => (
+                <Route component={item.component}/>
+              ))
+            }
+          </main>
+        </div>
+      </Router>
     )
   }
 }
 
-SideBar.protoTypes = {
+Nav.protoTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 }
 
-export default withStyles(styles, { withTheme: true})(SideBar)
+export default withStyles(styles, { withTheme: true})(Nav)
 

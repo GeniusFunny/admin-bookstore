@@ -18,7 +18,7 @@ const AddBookToCourt = (data) => {
   return ajax('court/add', 'put', data)
 }
 const DeleteBookFromCourt = (data) => {
-  return ajax('court/delete', 'delete', data)
+  return ajax('court/book', 'delete', data)
 }
 const Purchase = (data) => {
   return ajax('court/purchase', 'get', data)
@@ -28,6 +28,9 @@ const GetBooksInCourt = () => {
 }
 const Login = (data) => {
   return ajax('login', 'post', data)
+}
+const EditCourtBookCount = (data) => {
+  return ajax('court/book', 'post', data)
 }
 export {
   Test,
@@ -39,5 +42,6 @@ export {
   GetBooksInCourt,
   DeleteBookFromCourt,
   Purchase,
-  Login
+  Login,
+  EditCourtBookCount
 }

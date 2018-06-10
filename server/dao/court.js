@@ -7,31 +7,54 @@ const sql = {
   findBookInCourt: `
     SELECT *
     FROM court
-    WHERE userid=? AND bookid=?
+    WHERE userId=? AND bookId=?
   `,
   updateBookCourtCount: `
     UPDATE court SET count=count+1
-    WHERE userid=? AND bookid=?
+    WHERE userId=? AND bookId=?
   `,
   getCourt: `
-    SELECT bookid, count 
+    SELECT bookId, count 
     FROM court
-    WHERE userid=?
+    WHERE userId=?
   `,
   purchase: `
     DELETE FROM court
-    WHERE userid=?
+    WHERE userId=?
   `,
   delete: `
     DELETE FROM court
-    WHERE userid=? AND bookid=?
+    WHERE userId=? AND bookId=?
+  `,
+  editBookCourtCount: `
+    UPDATE court SET count=?
+    WHERE userId=? AND bookId=?
   `
 }
+
+async function editBookCourtCount (newCount, userId, bookId) {
+  let source = [newCount, userId, bookId]
+  let data = {
+    status: 0,
+    message: 'SUCCESS'
+  }
+  try {
+    await query(sql.editBookCourtCount, source)
+  } catch (e) {
+    data = {
+      status: 1,
+      message: 'FAILURE'
+    }
+  }
+  return data
+}
+
 async function findBook(userId, bookId) {
   let source = [userId, bookId]
   let data = await query(sql.findBookInCourt, source)
   return data.length !== 0
 }
+
 async function addBookToCourt(userId, bookId) {
   let source = [userId, bookId]
   let isExisting
@@ -68,8 +91,8 @@ async function addBookToCourt(userId, bookId) {
   return data
 }
 
-async function getCourt(userid) {
-  let source = [userid]
+async function getCourt(userId) {
+  let source = [userId]
   let data = {
     status: 1,
     message: '获取购物车列表失败'
@@ -86,21 +109,35 @@ async function getCourt(userid) {
   }
   return data
 }
-async function purchase(userid) {
+
+async function purchase(userId) {
   let source = []
-  source.push(userid)
+  source.push(userId)
   let data = await query(sql.purchase, source)
   return data
 }
 
-async function deleteBook(userid, bookid) {
-  let source = []
-  source.push(userid, bookid)
-  let data = await query(sql.delete, source)
-  return data
+async function deleteBook(userId, bookId) {
+  let source = [userId, bookId]
+  let res = {
+    status: 0,
+    message: 'SUCCESS'
+  }
+  try {
+    let data = await query(sql.delete, source)
+    console.log(data)
+  } catch (e) {
+    console.error(e)
+    res = {
+      status: 1,
+      message: 'FAILURE'
+    }
+  }
+  return res
 }
 
 exports.addBookToCourtDao = addBookToCourt
 exports.getCourtDao = getCourt
 exports.purchaseDao = purchase
 exports.deleteBookDao = deleteBook
+exports.editBookCourtCountDao = editBookCourtCount

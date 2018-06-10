@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
-import blue from '@material-ui/core/colors/blue'
 import {Checkbox, IconButton, Table, TableBody, TableHead, TableCell, TableFooter, TableRow, Input} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import {withStyles} from '@material-ui/core/styles'
-import {GetBooksInCourt} from "../api/Api"
+import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
 import Message from '../components/Message'
+import SelectAllIcon from '@material-ui/icons/SelectAll'
+import {find} from '../utils/utils'
 
 const styles = (theme) => ({
   root: {
@@ -58,9 +59,7 @@ class Court extends Component {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
-                  <Checkbox/>
-                </TableCell>
+                <TableCell/>
                 <TableCell>书名</TableCell>
                 <TableCell>作者</TableCell>
                 <TableCell>数量</TableCell>
@@ -75,9 +74,12 @@ class Court extends Component {
             <TableBody>
               {
                 this.state.data.map(item => (
-                  <TableRow key={item.bookid}>
+                  <TableRow key={item.bookId}>
                     <TableCell>
-                      <Checkbox/>
+                      <Checkbox
+                        checked={item.isSelected}
+                        id={item.bookId}
+                      />
                     </TableCell>
                     <TableCell>{item.bookname}</TableCell>
                     <TableCell>{item.author}</TableCell>
@@ -87,12 +89,13 @@ class Court extends Component {
                         type='number'
                         className={classNames(classes.count, classes.input)}
                         onChange={this.handleCountChange}
-                        id={item.bookid}
+                        onBlur={this.editBookCount}
+                        id={item.bookId}
                       />
                     </TableCell>
                     <TableCell>{item.price * item.count}.00</TableCell>
                     <TableCell>
-                      <IconButton>
+                      <IconButton onClick={this.handleDeleteBook} id={item.bookId}>
                         <DeleteIcon/>
                       </IconButton>
                     </TableCell>
@@ -100,6 +103,24 @@ class Court extends Component {
                 ))
               }
             </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TableCell>
+                  <IconButton>
+                    <SelectAllIcon/>
+                  </IconButton>
+                </TableCell>
+                <TableCell/>
+                <TableCell/>
+                <TableCell>199</TableCell>
+                <TableCell>1000.00</TableCell>
+                <TableCell>
+                  <IconButton onClick={this.handleDeleteAllBook}>
+                    <DeleteIcon/>
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            </TableFooter>
           </Table>
         </main>
         {/*<footer>*/}
@@ -111,12 +132,18 @@ class Court extends Component {
   componentDidMount () {
     this.getCourt()
   }
+  handleDeleteAllBook = () => {
+    console.log(123)
+  }
   getCourt = () => {
     GetBooksInCourt()
       .then(res => {
         if (res.status === 0) {
           this.setState({
-            data: res.data
+            data: res.data.map(item => ({
+              ...item,
+              isSelected: false
+            })),
           })
         } else {
           this.setState({
@@ -129,12 +156,38 @@ class Court extends Component {
       })
   }
   handleCountChange = (e) => {
+    let id = parseInt(e.target.id)
+    let value = parseInt(e.target.value)
     this.setState({
-      data: this.state.data.map((item, index) => ({
+      data: this.state.data.map(item => ({
         ...item,
-        count: index === e.target.id? e.target.value: item.count
+        count: item.bookId === id? value: item.count
       }))
     })
+  }
+  handleDeleteBook = (e) => {
+    let id = parseInt(e.currentTarget.id)
+    DeleteBookFromCourt({bookId: id})
+      .then(res => {
+        console.log(res)
+        this.setState({
+          data: this.state.data.filter(item => item.bookId !== id)
+        })
+      })
+  }
+  editBookCount = (e) =>  {
+    let id = parseInt(e.target.id)
+    let count = parseInt(e.target.value)
+    EditCourtBookCount({bookId: id, count: count})
+      .then(res => {
+        console.log(res)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+  computedBooksCount = () => {
+    let total = this.state.data.reduce()
   }
 }
 
