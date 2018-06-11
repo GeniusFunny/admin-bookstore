@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
-import {editBookCount, getBookList, cancelSelectBook, selectBook, deleteBook, purchase} from '../actions/court'
+import {editBookCount, getBookList, cancelSelectBook, selectBook, deleteBook, purchase, asyncDeleteBook, asyncGetBookList, asyncEditBookCount} from '../actions/court'
 import classNames from 'classnames'
 import {Checkbox, IconButton, Table, TableBody, TableHead, TableCell, TableFooter, TableRow, Input} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -9,13 +9,6 @@ import {withStyles} from '@material-ui/core/styles'
 import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
 import Message from '../components/Message'
 import SelectAllIcon from '@material-ui/icons/SelectAll'
-const mapStateToProps = state => ({
-  state: state.data
-})
-
-const mapDispatchToProps = dispatch => ({
-  data: (id, count) => dispatch(editBookCount(id, count))
-})
 const styles = (theme) => ({
   root: {
 
@@ -45,7 +38,6 @@ class Court extends Component {
     super(props)
     this.dispatch = this.props.dispatch
     this.state = {
-      data: [],
       Message: {
         message: '获取购物车失败',
         type: 'error',
@@ -79,38 +71,38 @@ class Court extends Component {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {
-                state.map(item => (
-                  <TableRow key={item.bookId}>
-                    <TableCell>
-                      <Checkbox
-                        checked={item.isSelected}
-                        id={item.bookId}
-                      />
-                    </TableCell>
-                    <TableCell>{item.bookname}</TableCell>
-                    <TableCell>{item.author}</TableCell>
-                    <TableCell>
-                      <Input
-                        value={item.count}
-                        type='number'
-                        className={classNames(classes.count, classes.input)}
-                        onChange={this.handleCountChange}
-                        // onBlur={this.editBookCount}
-                        id={item.bookId}
-                      />
-                    </TableCell>
-                    <TableCell>{item.price * item.count}.00</TableCell>
-                    <TableCell>
-                      <IconButton onClick={this.handleDeleteBook} id={item.bookId}>
-                        <DeleteIcon/>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))
-              }
-            </TableBody>
+            {/*<TableBody>*/}
+              {/*{*/}
+                {/*state.map(item => (*/}
+                  {/*<TableRow key={item.bookId}>*/}
+                    {/*<TableCell>*/}
+                      {/*<Checkbox*/}
+                        {/*checked={item.isSelected}*/}
+                        {/*id={item.bookId}*/}
+                      {/*/>*/}
+                    {/*</TableCell>*/}
+                    {/*<TableCell>{item.bookName}</TableCell>*/}
+                    {/*<TableCell>{item.author}</TableCell>*/}
+                    {/*<TableCell>*/}
+                      {/*<Input*/}
+                        {/*value={item.count}*/}
+                        {/*type='number'*/}
+                        {/*className={classNames(classes.count, classes.input)}*/}
+                        {/*onChange={this.handleCountChange}*/}
+                        {/*onBlur={this.editBookCount}*/}
+                        {/*id={item.bookId}*/}
+                      {/*/>*/}
+                    {/*</TableCell>*/}
+                    {/*<TableCell>{item.price * item.count}.00</TableCell>*/}
+                    {/*<TableCell>*/}
+                      {/*<IconButton onClick={this.handleDeleteBook} id={item.bookId}>*/}
+                        {/*<DeleteIcon/>*/}
+                      {/*</IconButton>*/}
+                    {/*</TableCell>*/}
+                  {/*</TableRow>*/}
+                {/*))*/}
+              {/*}*/}
+            {/*</TableBody>*/}
             <TableFooter>
               <TableRow>
                 <TableCell>
@@ -138,6 +130,8 @@ class Court extends Component {
     )
   }
   componentDidMount () {
+    console.log(this.props)
+    // this.dispatch(asyncGetBookList())
     // this.getCourt()
   }
   handleDeleteAllBook = () => {
@@ -147,15 +141,10 @@ class Court extends Component {
     GetBooksInCourt()
       .then(res => {
         if (res.status === 0) {
-          this.dispatch(getBookList(res.data))
-          this.setState({
-            data: res.data.map(item => ({
-              ...item,
-              isSelected: false
-            })),
-            totalMoney: this.computedBooksMoney(res.data),
-            totalCount: this.computedBooksCount(res.data)
-          })
+          this.dispatch(getBookList(res.data.map(item => ({
+            ...item,
+            isSelected: false
+          }))))
         } else {
           this.setState({
             Message: {
@@ -170,28 +159,23 @@ class Court extends Component {
     let id = parseInt(e.target.id)
     let value = parseInt(e.target.value)
     this.dispatch(editBookCount(id, value))
-    // this.setState({
-    //   data: this.state.data.map(item => ({
-    //     ...item,
-    //     count: item.bookId === id? value: item.count
-    //   }))
-    // })
   }
+
   handleDeleteBook = (e) => {
     let id = parseInt(e.currentTarget.id)
     DeleteBookFromCourt({bookId: id})
       .then(res => {
         console.log(res)
-        this.setState({
-          data: this.state.data.filter(item => item.bookId !== id)
-        })
+        this.dispatch(deleteBook(id))
       })
   }
+
   editBookCount = (e) =>  {
     let id = parseInt(e.target.id)
     let count = parseInt(e.target.value)
     EditCourtBookCount({bookId: id, count: count})
       .then(res => {
+        this.dispatch(editBookCount(id, count))
         console.log(res)
       })
       .catch(err => {
@@ -222,4 +206,16 @@ Court.propTypes = {
   classes: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
+
+const mapStateToProps = state => {
+  const {court, postsByCourt} = state
+  const res = postsByCourt[asyncGetBookList]
+  return {
+    res
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  data: (id, count) => dispatch(editBookCount(id, count))
+})
 export default connect(mapStateToProps)(withStyles(styles)(Court))

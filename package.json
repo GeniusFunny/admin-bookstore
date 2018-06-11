@@ -14,7 +14,9 @@
     "koa-redis": "^3.1.2",
     "koa-router": "^7.4.0",
     "mysql": "^2.15.0",
-    "redis": "^2.8.0"
+    "redis": "^2.8.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0"
   },
   "eslintConfig": {
     "semi": "error"
