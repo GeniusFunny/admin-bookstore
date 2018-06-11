@@ -1,5 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
+const redisStore = require('koa-redis')
+const session = require('koa-generic-session')
 const bodyParser = require('koa-bodyparser')
 const register = require('./server/service/user/RegisterService')
 const statusFilter = require('./server/utils/statusFiter')

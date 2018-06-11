@@ -130,13 +130,13 @@ class Nav extends Component {
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
             </div>
-            <NavList list={[]}/>
+            <NavList list={Routes}/>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
             {
               Routes.map(item => (
-                <Route component={item.component}/>
+                <Route path={item.path} component={item.component} key={item.path}/>
               ))
             }
           </main>

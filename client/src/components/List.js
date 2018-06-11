@@ -1,12 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {List, ListItemIcon,ListItem, ListItemText} from '@material-ui/core'
-import {Link, Route} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import {withStyles} from '@material-ui/core/styles'
-import PersonIcon from '@material-ui/icons/Person'
-import BookIcon from '@material-ui/icons/LibraryBooks'
-import DashboardIcon from '@material-ui/icons/Dashboard'
-import ShoppingCartIcon from '@material-ui/icons/ShoppingCart'
 
 const styles = () => ({
   root: {
@@ -21,41 +17,18 @@ const NavList = (props) => {
   return (
     <div className={classes.root}>
       <List component='nav'>
-        {/*{*/}
-          {/*list.map(item => (*/}
-            {/*<ListItem button>*/}
-              {/*<Link to={item.path}>*/}
-                {/*<ListItemIcon children={item.icon} />*/}
-                {/*<ListItemText primary={item.siderBarName}/>*/}
-              {/*</Link>*/}
-              {/*<Route path={item.path} component={item.component}/>*/}
-            {/*</ListItem>*/}
-          {/*))*/}
-        {/*}*/}
-        <ListItem button>
-          <ListItemIcon>
-            <DashboardIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Dashboard'/>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <BookIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Book Market'/>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <ShoppingCartIcon/>
-          </ListItemIcon>
-          <ListItemText primary='Shopping Cart'/>
-        </ListItem>
-        <ListItem button>
-          <ListItemIcon>
-            <PersonIcon/>
-          </ListItemIcon>
-          <ListItemText primary='User Profile'/>
-        </ListItem>
+        {
+          list.map(item => (
+            <ListItem button>
+              <Link to={item.path}>
+                <ListItemIcon >
+                  <item.icon/>
+                </ListItemIcon>
+                <ListItemText primary={item.siderBarName}/>
+              </Link>
+            </ListItem>
+          ))
+        }
       </List>
     </div>
   )

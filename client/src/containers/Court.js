@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 import PropTypes from 'prop-types'
+import {connect} from 'react-redux'
+import {editBookCount, getBookList, cancelSelectBook, selectBook, deleteBook, purchase} from '../actions/court'
 import classNames from 'classnames'
 import {Checkbox, IconButton, Table, TableBody, TableHead, TableCell, TableFooter, TableRow, Input} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
@@ -7,8 +9,13 @@ import {withStyles} from '@material-ui/core/styles'
 import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
 import Message from '../components/Message'
 import SelectAllIcon from '@material-ui/icons/SelectAll'
-import {find} from '../utils/utils'
+const mapStateToProps = state => ({
+  state: state.data
+})
 
+const mapDispatchToProps = dispatch => ({
+  data: (id, count) => dispatch(editBookCount(id, count))
+})
 const styles = (theme) => ({
   root: {
 
@@ -36,6 +43,7 @@ const styles = (theme) => ({
 class Court extends Component {
   constructor (props) {
     super(props)
+    this.dispatch = this.props.dispatch
     this.state = {
       data: [],
       Message: {
@@ -46,7 +54,7 @@ class Court extends Component {
     }
   }
   render () {
-    const {classes} = this.props
+    const {classes, state} = this.props
     return (
       <article>
         {/*<header>购物车</header>*/}
@@ -73,7 +81,7 @@ class Court extends Component {
             </TableHead>
             <TableBody>
               {
-                this.state.data.map(item => (
+                state.map(item => (
                   <TableRow key={item.bookId}>
                     <TableCell>
                       <Checkbox
@@ -89,7 +97,7 @@ class Court extends Component {
                         type='number'
                         className={classNames(classes.count, classes.input)}
                         onChange={this.handleCountChange}
-                        onBlur={this.editBookCount}
+                        // onBlur={this.editBookCount}
                         id={item.bookId}
                       />
                     </TableCell>
@@ -112,8 +120,8 @@ class Court extends Component {
                 </TableCell>
                 <TableCell/>
                 <TableCell/>
-                <TableCell>199</TableCell>
-                <TableCell>1000.00</TableCell>
+                <TableCell>{this.state.totalCount || 0}</TableCell>
+                <TableCell>{this.state.totalMoney || 0}.00</TableCell>
                 <TableCell>
                   <IconButton onClick={this.handleDeleteAllBook}>
                     <DeleteIcon/>
@@ -124,13 +132,13 @@ class Court extends Component {
           </Table>
         </main>
         {/*<footer>*/}
-          {/*提示*/}
+        {/*提示*/}
         {/*</footer>*/}
       </article>
     )
   }
   componentDidMount () {
-    this.getCourt()
+    // this.getCourt()
   }
   handleDeleteAllBook = () => {
     console.log(123)
@@ -139,11 +147,14 @@ class Court extends Component {
     GetBooksInCourt()
       .then(res => {
         if (res.status === 0) {
+          this.dispatch(getBookList(res.data))
           this.setState({
             data: res.data.map(item => ({
               ...item,
               isSelected: false
             })),
+            totalMoney: this.computedBooksMoney(res.data),
+            totalCount: this.computedBooksCount(res.data)
           })
         } else {
           this.setState({
@@ -158,12 +169,13 @@ class Court extends Component {
   handleCountChange = (e) => {
     let id = parseInt(e.target.id)
     let value = parseInt(e.target.value)
-    this.setState({
-      data: this.state.data.map(item => ({
-        ...item,
-        count: item.bookId === id? value: item.count
-      }))
-    })
+    this.dispatch(editBookCount(id, value))
+    // this.setState({
+    //   data: this.state.data.map(item => ({
+    //     ...item,
+    //     count: item.bookId === id? value: item.count
+    //   }))
+    // })
   }
   handleDeleteBook = (e) => {
     let id = parseInt(e.currentTarget.id)
@@ -186,12 +198,28 @@ class Court extends Component {
         console.error(err)
       })
   }
-  computedBooksCount = () => {
-    let total = this.state.data.reduce()
+  computedBooksMoney = (data) => {
+    if (data.length === 0) {
+      return 0
+    } else if (data.length === 1) {
+      return data[0].price * data[0].count
+    } else {
+      return data.reduce((current, next) => current.price * current.count + next.price * next.count)
+    }
+  }
+  computedBooksCount = (data) => {
+    if (data.length === 0) {
+      return 0
+    } else if (data.length === 1) {
+      return data[0].count
+    } else {
+      return data.reduce((current, next) => current.count + next.count)
+    }
   }
 }
 
 Court.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
 }
-export default withStyles(styles)(Court)
+export default connect(mapStateToProps)(withStyles(styles)(Court))
