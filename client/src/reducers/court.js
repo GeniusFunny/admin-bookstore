@@ -13,21 +13,21 @@ import {
 
 const calcCount = (data) => {
   let result = 0
-  if (data.length === 1) {
-    result = data[0].count
-  } else if (data.length > 1)  {
-    result = data.reduce((previousValue, currentValue) => previousValue.count + currentValue.count)
-  }
+  data.forEach(item => {
+    if (item.isSelected) {
+      result += item.count
+    }
+  })
   return result
 }
 
 const calcMoney = (data) => {
   let result = 0
-  if (data.length === 1) {
-    result = data[0].count * data[0].price
-  } else if (data.length > 1 ) {
-    result = data.reduce((previousValue, currentValue) => previousValue.count * previousValue.price + currentValue.count * currentValue.price)
-  }
+  data.forEach(item => {
+    if (item.isSelected) {
+      result += item.count * item.price
+    }
+  })
   return result
 }
 

@@ -76,19 +76,24 @@ const computedCourtMoney = () => ({
   type: COMPUTED_COURT_MONEY
 })
 
-const selectBook = (bookId) => ({
+const select = (bookId) => ({
   type: SELECT_BOOK,
   bookId: bookId
 })
+const selectBook = (bookId) => dispatch => {
+  dispatch(select(bookId))
+  dispatch(computedCourtCount())
+  dispatch(computedCourtMoney())
+}
 
-const selectBookAll = () => ({
+const selectAll = () => ({
   type: SELECT_BOOK_ALL
 })
-
-const cancelSelectBook = (bookId) => ({
-  type: 'Cancel_SELECT_BOOK',
-  id: bookId
-})
+const selectBookAll = () => dispatch => {
+  dispatch(selectAll())
+  dispatch(computedCourtCount())
+  dispatch(computedCourtMoney())
+}
 
 export {
   getAllProducts,
@@ -96,10 +101,8 @@ export {
   computedCourtCount,
   computedCourtMoney,
   receiveResponseStatus,
-  requestProducts,
   asyncEditBookCount,
   asyncDeleteBook,
   selectBook,
   selectBookAll,
-  cancelSelectBook,
 }
