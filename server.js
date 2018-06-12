@@ -5,6 +5,8 @@ const session = require('koa-generic-session')
 const bodyParser = require('koa-bodyparser')
 const register = require('./server/service/user/RegisterService')
 const statusFilter = require('./server/utils/statusFiter')
+const getUserInfo = require('./server/service/userInfo/GetUserInfoService')
+const updateUserInfo = require('./server/service/userInfo/UpdateUserInfoService')
 const test = require('./server/service/TestService')
 const getBookList = require('./server/service/book/GetBookListService')
 const addBook = require('./server/service/book/AddBookService')
@@ -16,6 +18,8 @@ const purchase = require('./server/service/court/PurchaseService')
 const login = require('./server/service/user/LoginService')
 const getBookInfo = require('./server/service/book/GetBookService')
 const editBookCourtCount = require('./server/service/court/EditBookCourtCount')
+const addBill = require('./server/service/bill/AddBillService')
+const getBill = require('./server/service/bill/GetBillService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -27,7 +31,7 @@ const urlIsPublic= (url, method) => {
   if (method !== 'GET') {
     return (url === '/login' || url === '/register')
   } else {
-    return url.indexOf('court') === -1
+    return url.indexOf('court') === -1 || url.indexOf('user') === -1
   }
 }
 app.use(bodyParser())
@@ -42,7 +46,7 @@ app.use(async (ctx, next) => {
   await next()
 })
   .use(async (ctx, next) => {
-    if (urlIsPublic(ctx.request.url, ctx.request.method)) {
+    if (urlIsPublic(ctx.request.url, ctx.request.method) || true) {
       await next()
     } else {
       let userId
@@ -103,6 +107,18 @@ router
   })
   .delete('/court/book', async (ctx) => {
     ctx.body = await deleteBook(ctx.request.userId, ctx.request.body.bookId)
+  })
+  .get('/user/info', async (ctx) => {
+    ctx.body = await getUserInfo(ctx.request.userId)
+  })
+  .post('/user/info', async (ctx) => {
+    ctx.body = await updateUserInfo(ctx.request.body.username, ctx.request.userId)
+  })
+  .get('/user/bill', async (ctx) => {
+    ctx.body = await getBill(ctx.request.userId)
+  })
+  .post('/user/bill', async (ctx) => {
+    ctx.body = await addBill(ctx.request.userId, ctx.request.body.money)
   })
 
 app

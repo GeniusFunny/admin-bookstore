@@ -20,7 +20,7 @@ const sql = {
   `,
   purchase: `
     DELETE FROM court
-    WHERE userId=?
+    WHERE userId=? AND bookId=?
   `,
   delete: `
     DELETE FROM court
