@@ -1,75 +1,88 @@
 import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
+import {REQUEST_PRODUCTS, RECEIVE_PRODUCTS, REQUEST_FAILURE, DELETE_BOOK, EDIT_BOOK_COUNT, RECEIVE_STATUS, COMPUTED_COURT_COUNT, COMPUTED_COURT_MONEY, SELECT_BOOK, SELECT_BOOK_ALL} from '../constants/actionType'
 
-const REQUEST_POSTS = 'REQUEST_POSTS'
-const RECEIVE_POSTS = 'RECEIVE_POSTS'
-const GET_BOOK_LIST = 'GET_BOOK_LIST'
-const EDIT_BOOK_COUNT = 'EDIT_BOOK_COUNT'
-const DELETE_BOOK = 'DELETE_BOOK'
-
-const requestPosts = (api) => {
-  return {
-    type: REQUEST_POSTS,
-    api
-  }
-}
-const receivePosts = (api, res) => {
-  return {
-    type: RECEIVE_POSTS,
-    res: res,
-    api
-  }
-}
-const getBookList = (api) => ({
-  type: GET_BOOK_LIST,
-  api
+const requestFailure = (err) => ({
+  type: REQUEST_FAILURE,
+  err
+})
+const receiveResponseStatus = (status) => ({
+  type: RECEIVE_STATUS,
+  status
 })
 
-const asyncGetBookList = (getBookList) => {
-  return dispatch => {
-    dispatch(requestPosts(getBookList))
-    return GetBooksInCourt
-      .then(res => {
-        dispatch(receivePosts(getBookList(res)))
-      })
-  }
-}
-const asyncDeleteBook = (bookId, deleteBook) => {
-  return dispatch => {
-    dispatch(requestPosts(deleteBook))
-    return DeleteBookFromCourt(bookId)
-      .then(res => {
-        dispatch(receivePosts(res))
-      })
-  }
-}
-const asyncEditBookCount = (bookId, newCount, editBookCount) => {
-  return dispatch => {
-    dispatch(requestPosts(editBookCount))
-    return EditCourtBookCount(bookId, newCount)
-      .then(res => {
-        dispatch(receivePosts(res))
-      })
-  }
+const requestProducts = () => ({
+  type: REQUEST_PRODUCTS
+})
+const receiveProducts = (products) => ({
+  type: RECEIVE_PRODUCTS,
+  products
+})
+const getAllProducts = () => dispatch => {
+  GetBooksInCourt()
+    .then(res => {
+      dispatch(receiveProducts(res.data))
+      dispatch(receiveResponseStatus(res.status))
+      dispatch(computedCourtCount())
+      dispatch(computedCourtMoney())
+    })
+    .catch(err => {
+      dispatch(requestFailure(err))
+    })
 }
 
 const editBookCount = (bookId, count) => ({
   type: EDIT_BOOK_COUNT,
-  count: count,
-  id: bookId
+  bookId: bookId,
+  count: count
 })
+const asyncEditBookCount = (bookId, count) => dispatch => {
+  EditCourtBookCount({bookId: bookId, count: count})
+    .then(res => {
+      dispatch(receiveResponseStatus(res.status))
+      dispatch(editBookCount(bookId, count))
+      dispatch(computedCourtCount())
+      dispatch(computedCourtMoney())
+    })
+    .catch(err => {
+      dispatch(requestFailure(err))
+    })
+}
 
 const deleteBook = (bookId) => ({
   type: DELETE_BOOK,
-  id: bookId
+  bookId: bookId
+})
+const asyncDeleteBook = (bookId) => dispatch => {
+  DeleteBookFromCourt({bookId: bookId})
+    .then(res => {
+      dispatch(receiveResponseStatus(res.status))
+      dispatch(deleteBook(bookId))
+      dispatch(computedCourtCount())
+      dispatch(computedCourtMoney())
+    })
+    .catch(err => {
+      dispatch(requestFailure(err))
+    })
+}
+
+// const asyncDeleteAllBooks = () => dispatch => {
+//
+// }
+const computedCourtCount = () => ({
+  type: COMPUTED_COURT_COUNT
+})
+
+const computedCourtMoney = () => ({
+  type: COMPUTED_COURT_MONEY
 })
 
 const selectBook = (bookId) => ({
-  type: 'SELECT_BOOK',
-  id: bookId
+  type: SELECT_BOOK,
+  bookId: bookId
 })
 
-const purchase = () => ({
-  type: 'PURCHASE'
+const selectBookAll = () => ({
+  type: SELECT_BOOK_ALL
 })
 
 const cancelSelectBook = (bookId) => ({
@@ -78,18 +91,15 @@ const cancelSelectBook = (bookId) => ({
 })
 
 export {
-  RECEIVE_POSTS,
-  REQUEST_POSTS,
-  EDIT_BOOK_COUNT,
-  DELETE_BOOK,
-  GET_BOOK_LIST,
-  editBookCount,
-  deleteBook,
-  purchase,
-  selectBook,
-  cancelSelectBook,
-  getBookList,
-  asyncDeleteBook,
+  getAllProducts,
+  requestFailure,
+  computedCourtCount,
+  computedCourtMoney,
+  receiveResponseStatus,
+  requestProducts,
   asyncEditBookCount,
-  asyncGetBookList
+  asyncDeleteBook,
+  selectBook,
+  selectBookAll,
+  cancelSelectBook,
 }

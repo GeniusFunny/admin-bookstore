@@ -1,19 +1,10 @@
 import {createStore, applyMiddleware} from 'redux'
 import thunkMiddleware from 'redux-thunk'
-import {createLogger} from 'redux-logger'
-import court from '../reducers/court'
-const loggerMiddleware = createLogger()
-
+import reducer from '../reducers/court'
 const store = createStore(
-  court,
-  {
-    data: [],
-    totalMoney: 0,
-    totalCount: 0
-  },
+  reducer,
   applyMiddleware(
-    thunkMiddleware,
-    loggerMiddleware
+    thunkMiddleware
   )
 )
 export default store
