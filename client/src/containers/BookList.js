@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {asyncGetBookList, asyncAddBookToCourt, asyncSearchBook, updateKeyWord, closeMessage} from '../actions/bookList'
 import PropTypes from 'prop-types'
 import {withStyles} from '@material-ui/core/styles'
 import {LinearProgress} from '@material-ui/core'
 import Search from '../components/Search'
-import {GetBookList, SearchBook, AddBookToCourt} from '../api/Api'
 import Book from '../components/Book'
 import Message from '../components/Message'
 const styles = (theme) => ({
@@ -22,53 +23,31 @@ const styles = (theme) => ({
 class BookList extends Component {
   constructor(props) {
     super(props)
-    this.messageMap = {
-      'success': () => ({
-        open: true,
-        message: '成功加入购物车',
-        type: 'success'
-      }),
-      'error': () => ({
-        open: true,
-        message: '加入购物车失败',
-        type: 'error'
-      })
-    }
-    this.state = {
-      bookList: [],
-      keyWord: '',
-      loading: true,
-      Message: {
-        open: false,
-        message: '加入购物车成功',
-        type: 'success'
-      }
-    }
   }
   render() {
-    const {classes} = this.props
+    const {classes, state} = this.props
     return (
       <div>
         <Message
-          message={this.state.Message.message}
-          type={this.state.Message.type}
-          open={this.state.Message.open}
+          message={state.message.message}
+          type={state.message.type}
+          open={state.message.open}
           close={() => this.messageClose()}
         />
         <header className={classes.header}>
           <Search
             data='可输入书名、作者进行搜索'
-            keyWord={this.state.keyWord}
+            keyWord={state.keyWord}
             changeKeyWord= {value => this.bindKeyWordChange(value)}
             clickSearch={() => this.searchClick()}
           />
-          <LinearProgress value="0" hidden={!this.state.loading}/>
+          <LinearProgress value="0" hidden={!state.loading}/>
         </header>
         <div
           className={classes.body}
         >
           {
-            this.state.bookList.map((item, index) => {
+            state.data.map((item, index) => {
               return <Book
                 data={item}
                 key={index}
@@ -80,61 +59,39 @@ class BookList extends Component {
       </div>
     )
   }
+
   messageClose = () => {
-    this.setState({
-      Message: {
-        ...this.state.Message,
-        open: false
-      }
-    })
+    this.props.close()
   }
+
   bindKeyWordChange = (value) => {
-    this.setState({
-      keyWord: value
-    })
+    this.props.changeKeyWord(value)
   }
+
   addBookToCourt = (bookId) => {
-    AddBookToCourt({bookId: bookId})
-      .then((res) => {
-        if (res.status === 0) {
-          this.setState({
-            Message: this.messageMap['success']()
-          })
-        } else {
-          this.setState({
-            Message: this.messageMap['error']()
-          })
-        }
-      })
+    this.props.addBook(bookId)
   }
+
   searchClick = () => {
-    this.setState({
-      loading: true
-    })
-    SearchBook({keyword: this.state.keyWord})
-      .then(data => {
-        this.setState({
-          bookList: data,
-          loading: false
-        })
-      })
+    this.props.search(this.props.state.keyWord)
   }
-  getBookList = async () => {
-    let data = await GetBookList()
-    return data
-  }
-  parseBookList = async () => {
-    let data = await this.getBookList()
-    this.setState({
-      bookList: data,
-      loading: false
-    })
-  }
+
   componentDidMount() {
-    this.parseBookList()
+    this.props.onLoad()
   }
 }
 BookList.propTypes = {
   classes: PropTypes.object.isRequired
 }
-export default withStyles(styles)(BookList)
+
+const mapStateToProps = (state) => ({
+  state: state
+})
+const mapDispatchToProps = (dispatch) => ({
+  onLoad: () => dispatch(asyncGetBookList()),
+  search: (keyWord) => dispatch(asyncSearchBook(keyWord)),
+  addBook: (bookId) => dispatch(asyncAddBookToCourt(bookId)),
+  changeKeyWord: (keyWord) => dispatch(updateKeyWord(keyWord)),
+  close: () => dispatch(closeMessage())
+})
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(BookList))

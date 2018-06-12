@@ -163,5 +163,4 @@ const mapDispatchToProps = (dispatch) => ({
 Court.propTypes = {
   classes: PropTypes.object.isRequired
 }
-
 export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(Court))

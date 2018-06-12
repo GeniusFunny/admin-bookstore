@@ -53,14 +53,14 @@ const Book = (props) => {
         <CardMedia
           className={classes.media}
           image={data.image}
-          title={data.bookname}
+          title={data.bookName}
         />
         <CardContent className={classes.cardContent}>
           <Typography
             component='h2'
             className={classes.cardContentTitle}
           >
-            {data.bookname}---{data.author}
+            {data.bookName}---{data.author}
           </Typography>
           <Typography
             component='p'

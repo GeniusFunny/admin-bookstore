@@ -1,7 +1,7 @@
 const searchBookDao = require('../../dao/book').seacrchBookDao
 
-async function searchBookService(bookname, author) {
-  let data = await searchBookDao(`%${bookname}%`, `%${author}%`)
+async function searchBookService(bookName, author) {
+  let data = await searchBookDao(`%${bookName}%`, `%${author}%`)
   return data
 }
 

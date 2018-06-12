@@ -6,7 +6,7 @@ const sql = {
     FROM book
   `,
   insert: `
-    INSERT INTO book(bookname, author, price)
+    INSERT INTO book(bookName, author, price)
       VALUES(?, ?, ?)
   `,
   delete: `
@@ -16,7 +16,7 @@ const sql = {
   search: `
     SELECT *
     FROM book
-    WHERE bookname like ? or author like ?
+    WHERE bookName like ? or author like ?
   `,
   find: `
     SELECT *
@@ -26,7 +26,21 @@ const sql = {
 }
 
 async function getBookListDao () {
-  return await query(sql.getList)
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    let res = await query(sql.getList)
+    data = {
+      status: 0,
+      message: 'SUCCESS',
+      data: res
+    }
+  } catch (e) {
+    console.error(e)
+  }
+  return data
 }
 
 async function getBookDao (bookId) {
@@ -48,8 +62,8 @@ async function getBookDao (bookId) {
   return data
 }
 
-async function insertBookDao(bookname, author, price) {
-  let source = [bookname, author, price]
+async function insertBookDao(bookName, author, price) {
+  let source = [bookName, author, price]
   let data = await query(sql.insert, source)
   return data
 }
@@ -59,9 +73,22 @@ async function deleteBookDao(bookId) {
   return data
 }
 
-async function searchBookDao(bookname, author) {
-  let source = [bookname, author]
-  let data = await query(sql.search, source)
+async function searchBookDao(bookName, author) {
+  let source = [bookName, author]
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    let res = await query(sql.search, source)
+    data = {
+      status: 0,
+      message: 'SUCCESS',
+      data: res
+    }
+  } catch (e) {
+    console.error(e)
+  }
   return data
 }
 

@@ -1,15 +1,6 @@
 import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
-import {REQUEST_PRODUCTS, RECEIVE_PRODUCTS, REQUEST_FAILURE, DELETE_BOOK, EDIT_BOOK_COUNT, RECEIVE_STATUS, COMPUTED_COURT_COUNT, COMPUTED_COURT_MONEY, SELECT_BOOK, SELECT_BOOK_ALL} from '../constants/actionType'
-
-const requestFailure = (err) => ({
-  type: REQUEST_FAILURE,
-  err
-})
-const receiveResponseStatus = (status) => ({
-  type: RECEIVE_STATUS,
-  status
-})
-
+import {REQUEST_PRODUCTS, RECEIVE_PRODUCTS, DELETE_BOOK, EDIT_BOOK_COUNT, COMPUTED_COURT_COUNT, COMPUTED_COURT_MONEY, SELECT_BOOK, SELECT_BOOK_ALL} from '../constants/actionType'
+import {receiveResponseStatus, requestFailure} from './common'
 const requestProducts = () => ({
   type: REQUEST_PRODUCTS
 })
@@ -97,10 +88,8 @@ const selectBookAll = () => dispatch => {
 
 export {
   getAllProducts,
-  requestFailure,
   computedCourtCount,
   computedCourtMoney,
-  receiveResponseStatus,
   asyncEditBookCount,
   asyncDeleteBook,
   selectBook,

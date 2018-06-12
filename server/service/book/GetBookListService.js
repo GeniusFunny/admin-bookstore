@@ -1,8 +1,7 @@
 const getBookListDao = require('../../dao/book').getBookListDao
 
 async function getBookListService() {
-  let data = await getBookListDao()
-  return data
+  return await getBookListDao()
 }
 
 module.exports = getBookListService

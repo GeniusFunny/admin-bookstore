@@ -1,7 +1,7 @@
 const insertBookDao = require('../../dao/book').insertBookDao
 
-async function addBookService(bookname, author, price) {
-  let data = await insertBookDao(bookname, author, price)
+async function addBookService(bookName, author, price) {
+  let data = await insertBookDao(bookName, author, price)
   return data
 }
 

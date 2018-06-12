@@ -80,11 +80,11 @@ router
     ctx.body = await getBookList()
   })
   .get('/book', async (ctx) => {
-    ctx.body = await searchBook(ctx.request.query.keyword, ctx.request.query.keyword)
+    ctx.body = await searchBook(ctx.request.query.keyWord, ctx.request.query.keyWord)
   })
   .post('/book', async (ctx) => {
     let data = ctx.request.body
-    ctx.body = await addBook(data.bookname, data.author, data.price)
+    ctx.body = await addBook(data.bookName, data.author, data.price)
   })
   .put('/court/add', async (ctx) => {
     let data = ctx.request.body
