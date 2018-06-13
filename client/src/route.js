@@ -1,4 +1,4 @@
-import LoginForm from './containers/LoginForm'
+import PersonalCenter from './containers/PersonalCenter'
 import BookList from './containers/BookList'
 import Court from './containers/Court'
 import {Dashboard, LibraryBooks, ShoppingCart, Person} from '@material-ui/icons'
@@ -22,8 +22,8 @@ const routes = [
     sideBarName: 'Shopping Cart'
   },
   {
-    path: '/login',
-    component: LoginForm,
+    path: '/personalCenter',
+    component: PersonalCenter,
     icon: Person,
     sideBarName: 'User Profile'
   }

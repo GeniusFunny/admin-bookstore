@@ -31,7 +31,7 @@ const urlIsPublic= (url, method) => {
   if (method !== 'GET') {
     return (url === '/login' || url === '/register')
   } else {
-    return url.indexOf('court') === -1 || url.indexOf('user') === -1
+    return url.indexOf('court') === -1 && url.indexOf('user') === -1
   }
 }
 app.use(bodyParser())
@@ -46,7 +46,7 @@ app.use(async (ctx, next) => {
   await next()
 })
   .use(async (ctx, next) => {
-    if (urlIsPublic(ctx.request.url, ctx.request.method) || true) {
+    if (urlIsPublic(ctx.request.url, ctx.request.method)) {
       await next()
     } else {
       let userId
@@ -109,6 +109,7 @@ router
     ctx.body = await deleteBook(ctx.request.userId, ctx.request.body.bookId)
   })
   .get('/user/info', async (ctx) => {
+    console.log(ctx.request.userId)
     ctx.body = await getUserInfo(ctx.request.userId)
   })
   .post('/user/info', async (ctx) => {
