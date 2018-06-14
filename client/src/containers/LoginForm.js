@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import {Button} from '@material-ui/core'
 import BSInput from '../components/Input'
 import {withStyles} from '@material-ui/core/styles'
-import {Login} from '../api/Api'
+import {asyncLoginIn} from '../actions/login'
 
 const styles = () => ({
   body: {
@@ -66,13 +68,14 @@ class LoginForm extends Component {
     })
   }
   buttonClick = () => {
-    Login({username: this.state.username.value, password: this.state.password.value})
-      .then(res => {
-        console.log(res)
-      })
+    this.props.login({username: this.state.username.value, password: this.state.password.value})
   }
   render () {
-    const {classes} = this.props
+    const {classes, isAuth} = this.props
+    if (isAuth) {
+      console.log(this.props.location.state.from.pathname)
+      return <Redirect to={this.props.location.state.from.pathname}/>
+    }
     return (
       <article className={classes.root}>
         <main className={classes.body}>
@@ -102,5 +105,10 @@ class LoginForm extends Component {
     )
   }
 }
-
-export default withStyles(styles)(LoginForm)
+const stateMapToProps = (state) => ({
+  isAuth: state.login.isAuth
+})
+const dispatchMapToProps = (dispatch) => ({
+  login: (data) => dispatch(asyncLoginIn(data))
+})
+export default connect(stateMapToProps, dispatchMapToProps)(withStyles(styles)(LoginForm))

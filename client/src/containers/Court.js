@@ -151,7 +151,7 @@ class Court extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  state: state
+  state: state.court
 })
 const mapDispatchToProps = (dispatch) => ({
   onLoad: () => dispatch(getAllProducts()),

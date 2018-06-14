@@ -23,14 +23,16 @@ class PersonalCenter extends Component {
     this.props.loadBill()
   }
   render () {
-    const {classes, state} = this.props
+    const {classes, state, isAuth} = this.props
     return (
       <article className={classes.root}>
-        <h4>我的信息</h4>
-        <Info info={state.info}/>
-        <Divider/>
-        <h4>我的账单</h4>
-        <Bill billList={state.billList}/>
+        <div hidden={!isAuth}>
+          <h4>我的信息</h4>
+          <Info info={state.info}/>
+          <Divider/>
+          <h4>我的账单</h4>
+          <Bill billList={state.billList}/>
+        </div>
       </article>
     )
   }
@@ -41,7 +43,8 @@ PersonalCenter.propTypes = {
   classes: PropTypes.object.isRequired
 }
 const mapStateToProps = (state) => ({
-  state: state
+  state: state.personalCenter,
+  isAuth: state.login.isAuth
 })
 const mapDispatchToProps = (dispatch) => ({
   loadBill: () => dispatch(asyncGetBill()),

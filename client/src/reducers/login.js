@@ -1,29 +1,16 @@
-const login = (state = [], action) => {
+import {LOGIN_OUT, LOGIN_SUCCESS} from '../constants/actionType'
+
+const login = (state = {
+  isAuth: false,
+  username: '尚未登录'
+}, action) => {
   switch (action.type) {
-    case 'LOGIN_IN':
-      return {
-        ...state,
-        loading: true
-      }
-    case 'LOGIN_SUCCESS':
-      return {
-        ...state,
-        loading: false,
-        hasLoginIn: true
-      }
-    case 'LOGIN_FAILURE':
-      return {
-        ...state,
-        loading: false
-      }
-    case 'LOGIN_OUT':
-      return {
-        ...state,
-        hasLoginIn: false
-      }
-    default: {
+    case LOGIN_SUCCESS:
+      return Object.assign({}, state, {username: action.username, isAuth: true})
+    case LOGIN_OUT:
+      return Object.assign({}, state, {isAuth: false, username: '尚未登录'})
+    default:
       return state
-    }
   }
 }
 

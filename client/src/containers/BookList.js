@@ -85,7 +85,7 @@ BookList.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  state: state
+  state: state.bookList
 })
 const mapDispatchToProps = (dispatch) => ({
   onLoad: () => dispatch(asyncGetBookList()),

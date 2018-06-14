@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import {withStyles} from '@material-ui/core/styles'
@@ -8,8 +9,9 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import NavList from '../components/List'
-import Routes from '../route'
+import {routes, PrivateRoute} from '../route'
 import {GetBooksInCourt} from '../api/Api'
+import Login from "./LoginForm";
 const drawerWidth = 240
 
 const styles =  theme => ({
@@ -94,7 +96,7 @@ class Nav extends Component {
 
   render() {
     GetBooksInCourt()
-    const { classes, theme } = this.props
+    const { classes, theme, isAuth } = this.props
 
     return (
       <Router>
@@ -129,15 +131,20 @@ class Nav extends Component {
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
             </div>
-            <NavList list={Routes}/>
+            <NavList list={routes}/>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
             {
-              Routes.map(item => (
-                <Route path={item.path} component={item.component} key={item.path}/>
+              routes.map(item => (
+                item.isPublic ? <Route path={item.path} component={item.component} key={item.path}/> : <PrivateRoute path={item.path} component={item.component} key={item.path} isAuth={isAuth}/>
               ))
             }
+            <Route
+              path='/login'
+              exact
+              component={Login}
+            />
           </main>
         </div>
       </Router>
@@ -149,6 +156,8 @@ Nav.protoTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 }
-
-export default withStyles(styles, { withTheme: true})(Nav)
+const stateMapToProps = (state) => ({
+  isAuth: state.login.isAuth
+})
+export default connect(stateMapToProps)(withStyles(styles, { withTheme: true})(Nav))
 
