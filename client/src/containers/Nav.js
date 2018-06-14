@@ -11,7 +11,8 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import NavList from '../components/List'
 import {routes, PrivateRoute} from '../route'
 import {GetBooksInCourt} from '../api/Api'
-import Login from "./LoginForm";
+import Login from './LoginForm'
+import Register from './RegisterForm'
 const drawerWidth = 240
 
 const styles =  theme => ({
@@ -144,6 +145,11 @@ class Nav extends Component {
               path='/login'
               exact
               component={Login}
+            />
+            <Route
+              path='/register'
+              exact
+              component={Register}
             />
           </main>
         </div>

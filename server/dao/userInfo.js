@@ -9,6 +9,9 @@ const sql = {
   update: `
     UPDATE user_info SET username=?
     WHERE userId=?
+  `,
+  insert: `
+    INSERT INTO user_info VALUES(?, ?, ?)
   `
 }
 
@@ -48,6 +51,24 @@ async function getUserInfo (userId) {
   }
   return data
 }
+async function insertUserInfo (phone, username, userId) {
+  let source = [phone, username, userId]
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    await query(sql.insert, source)
+    data = {
+      status: 0,
+      message: 'SUCCESS'
+    }
+  } catch (e) {
+    console.error(e)
+  }
+  return data
+}
 
 exports.updateUserInfoDao = updateUserInfoDao
+exports.insertUserInfoDao = insertUserInfo
 exports.getUserInfoDao = getUserInfo

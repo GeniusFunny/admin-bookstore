@@ -64,12 +64,37 @@ async function getBookDao (bookId) {
 
 async function insertBookDao(bookName, author, price) {
   let source = [bookName, author, price]
-  let data = await query(sql.insert, source)
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    await query(sql.insert, source)
+    data = {
+      status: 0,
+      message: 'SUCCESS'
+    }
+  } catch (e) {
+    console.error(e, '插入失败')
+  }
   return data
 }
 
 async function deleteBookDao(bookId) {
-  let data = await query(sql.delete, bookId)
+  let source = [bookId]
+  let data = {
+    status: 1,
+    message: 'FAILURE'
+  }
+  try {
+    await await query(sql.delete, source)
+    data = {
+      status: 0,
+      message: 'SUCCESS'
+    }
+  } catch (e) {
+    console.error(e, '删除失败')
+  }
   return data
 }
 

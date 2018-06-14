@@ -19,14 +19,14 @@ const NavList = (props) => {
       <List component='nav'>
         {
           list.map(item => (
-            <ListItem button>
-              <Link to={item.path}>
-                <ListItemIcon >
+            <Link to={item.path} style={{textDecoration: 'none'}}>
+              <ListItem button>
+                <ListItemIcon>
                   <item.icon/>
                 </ListItemIcon>
-                <ListItemText primary={item.siderBarName}/>
-              </Link>
-            </ListItem>
+                <ListItemText primary={item.sideBarName}/>
+              </ListItem>
+            </Link>
           ))
         }
       </List>

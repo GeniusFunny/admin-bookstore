@@ -109,7 +109,6 @@ router
     ctx.body = await deleteBook(ctx.request.userId, ctx.request.body.bookId)
   })
   .get('/user/info', async (ctx) => {
-    console.log(ctx.request.userId)
     ctx.body = await getUserInfo(ctx.request.userId)
   })
   .post('/user/info', async (ctx) => {

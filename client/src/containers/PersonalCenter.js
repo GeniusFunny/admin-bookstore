@@ -24,6 +24,7 @@ class PersonalCenter extends Component {
   }
   render () {
     const {classes, state, isAuth} = this.props
+    console.log(this.props)
     return (
       <article className={classes.root}>
         <div hidden={!isAuth}>

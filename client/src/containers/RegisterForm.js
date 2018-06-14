@@ -1,8 +1,11 @@
 import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {Redirect} from 'react-router-dom'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
 import BSInput from '../components/Input'
 import {Register} from '../api/Api'
+import {asyncRegister} from '../actions/register'
 
 const styles = {
   container: {
@@ -72,7 +75,7 @@ const styles = {
 }
 
 
-export default class RegisterForm extends Component {
+class RegisterForm extends Component {
   constructor(props) {
     super(props)
     this.form = {
@@ -108,10 +111,7 @@ export default class RegisterForm extends Component {
     })
   }
   buttonClick = () => {
-    Register(this.getInfo())
-      .then(res => {
-        console.log(res)
-      })
+    this.props.register(this.getInfo())
   }
   checkBoxClick = () => {
     this.setState({
@@ -123,6 +123,11 @@ export default class RegisterForm extends Component {
     phone: parseInt(this.state.phone.value)
   })
   render() {
+    const {isAuth} = this.props
+    console.log(this.props)
+    if (isAuth) {
+      return <Redirect to='/personalCenter'/>
+    }
     return (
       <section style={styles.container}>
         <header style={styles.header.container}>
@@ -170,3 +175,10 @@ export default class RegisterForm extends Component {
     )
   }
 }
+const stateMapToProps = (state) => ({
+  isAuth: state.login.isAuth
+})
+const dispatchMapToProps = (dispatch) => ({
+  register: (data) => dispatch(asyncRegister(data))
+})
+export default connect(stateMapToProps, dispatchMapToProps)(RegisterForm)
