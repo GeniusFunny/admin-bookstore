@@ -24,7 +24,11 @@ async function loginService (phone, password) {
       if (password === user[0].password) {
         res = {
           status: 0,
-          message: 'SUCCESS'
+          message: 'SUCCESS',
+          data: {
+            userId: user[0].userId,
+            role: user[0].role
+          }
         }
       }
       else {
@@ -38,7 +42,7 @@ async function loginService (phone, password) {
   } catch (e) {
     console.error(e)
   }
-
+  console.log(res)
   return res
 }
 

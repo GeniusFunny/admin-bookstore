@@ -3,34 +3,35 @@ import React from 'react'
 import PersonalCenter from './containers/PersonalCenter'
 import BookList from './containers/BookList'
 import Court from './containers/Court'
+import Management from './containers/Management'
 import {Dashboard, LibraryBooks, ShoppingCart, Person} from '@material-ui/icons'
 const routes = [
   {
-    path: '/home',
-    component: Dashboard,
+    path: '/management',
+    component: Management,
     icon: Dashboard,
-    sideBarName: 'Dashboard',
+    sideBarName: '书店管理',
     isPublic: true
   },
   {
     path: '/bookList',
     component: BookList,
     icon: LibraryBooks,
-    sideBarName: 'Book Market',
+    sideBarName: '图书市场',
     isPublic: true
   },
   {
     path: '/court',
     component: Court,
     icon: ShoppingCart,
-    sideBarName: 'Shopping Cart',
+    sideBarName: '购物车',
     isPublic: false
   },
   {
     path: '/personalCenter',
     component: PersonalCenter,
     icon: Person,
-    sideBarName: 'User Profile',
+    sideBarName: '个人中心',
     isPublic: false
   }
 ]

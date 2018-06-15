@@ -4,36 +4,45 @@ import PropTypes from 'prop-types'
 import {asyncGetBill} from '../actions/bill'
 import {asyncGetUserInfo} from '../actions/info'
 import {withStyles} from '@material-ui/core/styles'
-import {Divider} from '@material-ui/core'
+import {Divider, Tabs, Tab, AppBar} from '@material-ui/core'
 import Bill from '../components/Bill'
 import Info from '../components/Info'
 
 const styles = () => ({
-  root: {
-    padding: 15
-  }
+  root: {}
 })
 
 class PersonalCenter extends Component {
   constructor (props) {
     super(props)
+    this.state = {
+      tab: 0
+    }
   }
   componentDidMount () {
     this.props.loadInfo()
     this.props.loadBill()
   }
+  changeTab = (event, value) => {
+    this.setState({
+      tab: value
+    })
+  }
   render () {
-    const {classes, state, isAuth} = this.props
-    console.log(this.props)
+    const {classes, state} = this.props
+    const tab = this.state.tab
     return (
       <article className={classes.root}>
-        <div hidden={!isAuth}>
-          <h4>我的信息</h4>
-          <Info info={state.info}/>
-          <Divider/>
-          <h4>我的账单</h4>
-          <Bill billList={state.billList}/>
-        </div>
+        <AppBar position='static' color='default'>
+          <Tabs value={tab} onChange={this.changeTab}>
+            <Tab label='个人信息'/>
+            <Tab label='账单'/>
+          </Tabs>
+        </AppBar>
+        <main>
+          {tab === 0 && <Info info={state.info}/>}
+          {tab === 1 && <Bill billList={state.billList}/>}
+        </main>
       </article>
     )
   }

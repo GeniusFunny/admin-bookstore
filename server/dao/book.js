@@ -30,7 +30,7 @@ async function getBookListDao () {
 }
 
 async function getBookDao (bookId) {
-  return await query(sql.get, [bookId])
+  return await query(sql.find, [bookId])
 
 }
 

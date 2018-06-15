@@ -30,7 +30,7 @@ const styles =  theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    background: 'linear-gradient(85deg, #edd5d1 20%, #e9edf3 30%)',
+    // background: 'linear-gradient(85deg, #edd5d1 20%, #e9edf3 30%)',
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -48,7 +48,7 @@ const styles =  theme => ({
     display: 'none'
   },
   drawerPaper: {
-    background: 'linear-gradient(0deg, #e8edf0 90%, #edd5d0 30%)',
+    // background: 'linear-gradient(0deg, #e8edf0 90%, #edd5d0 30%)',
     height: 107 + 'vh',
     position: 'relative',
     whiteSpace: 'nowrap',

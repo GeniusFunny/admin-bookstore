@@ -8,7 +8,7 @@ const styles = () => ({
   root: {
     width: '100%',
     maxHeight: 360,
-    background: 'linear-gradient(45deg, #e9edf3 30%, #edd5d1 90%)',
+    // background: 'linear-gradient(45deg, #e9edf3 30%, #edd5d1 90%)',
   }
 })
 

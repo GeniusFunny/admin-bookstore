@@ -19,6 +19,9 @@ const login = require('./server/service/user/LoginService')
 const editBookCourtCount = require('./server/service/court/EditBookCourtCount')
 const addBill = require('./server/service/bill/AddBillService')
 const getBill = require('./server/service/bill/GetBillService')
+const getBillListManagement = require('./server/service/management/GetBillListService')
+const getUserListManagement = require('./server/service/management/GetUserListService')
+const getBookListManagement = require('./server/service/management/GetBookListService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -67,7 +70,7 @@ router
     let data = ctx.request.body
     ctx.body = await register(data.phone, data.password)
   })
-  .post('/login', async (ctx, next) => {
+  .post('/login', async (ctx) => {
     let data = ctx.request.body
     ctx.body = await login(data.username, data.password)
     if (ctx.body.status === 0) {
@@ -91,8 +94,7 @@ router
     ctx.body = await addToCourt(ctx.request.userId, data.bookId)
   })
   .get('/book/:id', async (ctx) => {
-    console.log(ctx.request)
-    ctx.body = await getBookInfo(ctx.request.body.bookId)
+    ctx.body = await getBookInfo(ctx.params.id)
   })
   .get('/court/list', async (ctx) => {
     ctx.body = await getCourt(ctx.request.userId)
@@ -114,6 +116,15 @@ router
   })
   .post('/user/bill', async (ctx) => {
     ctx.body = await addBill(ctx.request.userId, ctx.request.body.money)
+  })
+  .get('/management/billList', async (ctx) => {
+      ctx.body = await getBillListManagement()
+  })
+  .get('/management/bookList', async (ctx) => {
+    ctx.body = await getBookListManagement()
+  })
+  .get('/management/userList', async (ctx) => {
+    ctx.body = await getUserListManagement()
   })
 
 app

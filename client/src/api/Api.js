@@ -1,7 +1,4 @@
 import ajax from './ajax'
-const Test = () => {
-  return ajax('test', 'get')
-}
 const Register = (data) => {
   return ajax('register', 'post', data)
 }
@@ -42,10 +39,33 @@ const GetUserBill = () => {
   return ajax('user/bill', 'get')
 }
 const GetBookInfo = (data) => {
-  return ajax('book/info', 'post', data)
+  return ajax('book', 'get_restful', data)
+}
+const DeleteBookManagement = (data) => {
+  return ajax('management/book', 'delete_restful', data)
+}
+const AddBookManagement = (data) => {
+  return ajax('management/book', 'post', data)
+}
+const EditBookManagement = (data) => {
+  return ajax('management/book', 'post', data)
+}
+const FindBookManagement = (data) => {
+  return ajax('management/book', 'get', data)
+}
+const GetBookListManagement = () => {
+  return ajax('management/bookList', 'get')
+}
+const GetBillListManagement = () => {
+  return ajax('management/billList', 'get')
+}
+const EditBillManagement = (data) => {
+  return ajax('management/bill', 'post', data)
+}
+const GetUserListManagement = () => {
+  return ajax('management/userList', 'get')
 }
 export {
-  Test,
   Register,
   GetBookList,
   AddBook,
@@ -59,5 +79,13 @@ export {
   Login,
   EditCourtBookCount,
   GetUserBill,
-  GetBookInfo
+  GetBookInfo,
+  GetBookListManagement,
+  AddBookManagement,
+  DeleteBookManagement,
+  EditBillManagement,
+  EditBookManagement,
+  FindBookManagement,
+  GetBillListManagement,
+  GetUserListManagement
 }
