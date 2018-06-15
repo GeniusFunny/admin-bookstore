@@ -2,33 +2,28 @@ const getCourtDao = require('../../dao/court').getCourtDao
 const getBookService = require('../book/GetBookService')
 
 async function getCourtService(userId) {
-  let res
+  let res = {
+    status: 1,
+    message: '获取购物车列表失败'
+  }
   try {
     let courtList = await getCourtDao(userId)
+    res = {
+      status: 0,
+      message: 'SUCCESS',
+      data: []
+    }
     try {
-      res = {
-        status: 0,
-        message: 'SUCCESS',
-        data: []
-      }
-      for (let item of courtList.data) {
-        let data = await getBookService(item.bookId)
-        data.data.count = item.count
-        res.data.push(data.data)
+      for (let item of courtList) {
+        let book = await getBookService(item.bookId)
+        book.data.count = item.count
+        res.data.push(book.data)
       }
     } catch (e) {
-      console.error(e, '获取书籍信息失败')
-      res = {
-        status: 1,
-        message: 'FAILURE'
-      }
+      console.error(e, '获取书籍失败')
     }
   } catch (e) {
-    res = {
-      status: 1,
-      message: 'FAILURE'
-    }
-    console.error(e, '获取购物车失败')
+    console.error(e, '获取购物车列表失败')
   }
   return res
 }

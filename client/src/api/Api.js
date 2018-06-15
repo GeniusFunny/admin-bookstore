@@ -41,6 +41,9 @@ const EditUserInfo = (data) => {
 const GetUserBill = () => {
   return ajax('user/bill', 'get')
 }
+const GetBookInfo = (data) => {
+  return ajax('book/info', 'post', data)
+}
 export {
   Test,
   Register,
@@ -55,5 +58,6 @@ export {
   EditUserInfo,
   Login,
   EditCourtBookCount,
-  GetUserBill
+  GetUserBill,
+  GetBookInfo
 }

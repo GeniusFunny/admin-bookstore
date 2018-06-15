@@ -1,19 +1,34 @@
 const registerDao = require('../../dao/user').regiterDao
 const insertUserInfoService = require('../userInfo/InsertUserInfoService')
-
+/*
+  @code
+  1：  注册失败
+  2：  添加个人信息失败
+ */
 async function registerService(phone, password) {
-  let data
-  try {
-    data = await registerDao(phone, password)
-    console.log(data)
-    await insertUserInfoService(phone, `用户${data.data.userId}`, data.data.userId)
-  }catch (e) {
-    console.error(e.message)
-    data = {
-      status: 1,
-      message: 'Service错误'
-    }
+  let res = {
+    status: 1,
+    message: 'FAILURE',
+    code: 1
   }
-  return data
+  try {
+    let data = await registerDao(phone, password)
+    try {
+      await insertUserInfoService(phone, `用户${data.data.userId}`, data.data.userId)
+      res = {
+        status: 0,
+        message: 'SUCCESS'
+      }
+    } catch (e) {
+      res = {
+        status: 1,
+        message: 'FAILURE',
+        code: 2
+      }
+    }
+  } catch (e) {
+    console.error(e)
+  }
+  return res
 }
 module.exports = registerService

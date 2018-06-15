@@ -16,57 +16,14 @@ const sql = {
 }
 
 async function updateUserInfoDao (username, userId) {
-  let source = [username, userId]
-  let data = {
-    status: 1,
-    message: 'FAILURE'
-  }
-  try {
-    await query(sql.update, source)
-    data = {
-      status: 0,
-      message: 'SUCCESS'
-    }
-  } catch (e) {
-    console.error(e)
-  }
-  return data
+  return await query(sql.update, [username, userId])
 }
 
 async function getUserInfo (userId) {
-  let source = [userId]
-  let data = {
-    status: 1,
-    message: 'FAILURE'
-  }
-  try {
-    let res = await query(sql.get, source)
-    data = {
-      status: 0,
-      message: 'SUCCESS',
-      data: res[0]
-    }
-  } catch (e) {
-    console.error(e)
-  }
-  return data
+  return await query(sql.get, [userId])
 }
 async function insertUserInfo (phone, username, userId) {
-  let source = [phone, username, userId]
-  let data = {
-    status: 1,
-    message: 'FAILURE'
-  }
-  try {
-    await query(sql.insert, source)
-    data = {
-      status: 0,
-      message: 'SUCCESS'
-    }
-  } catch (e) {
-    console.error(e)
-  }
-  return data
+  return await query(sql.insert, [phone, username, userId])
 }
 
 exports.updateUserInfoDao = updateUserInfoDao

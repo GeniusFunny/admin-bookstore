@@ -17,58 +17,15 @@ const sql = {
 }
 
 async function loginDao (phone, password) {
-  let source = [phone]
-  let data
-  let res = await query(sql.login, source)
-  if (res.length === 0) {
-    data = {
-      status: 1,
-      message: '用户不存在'
-    }
-  } else if (res[0].password === password) {
-    data = {
-      status: 0,
-      message: 'SUCCESS',
-      data: {
-        role: res[0].role,
-        userId: res[0].userId
-      }
-    }
-  } else {
-    data = {
-      status: 1,
-      message: '密码错误'
-    }
-  }
-  return data
+  return await query(sql.login, [phone, password])
 }
 
 async function registerDao (phone, password) {
-  let source = [phone, password]
-  let data
-  try {
-    let res = await query(sql.register, source)
-    data = {
-      status: 0,
-      message: 'SUCCESS',
-      data: {
-        userId: res.insertId
-      }
-    }
-  } catch (e) {
-    if (e.code === 'ER_DUP_ENTRY') {
-      data = {
-        status: 1,
-        message: '手机号被占用'
-      }
-    }
-  }
-  return data
+  return await query(sql.register, [phone, password])
 }
 
 async function editDao (newPassword, userId) {
-  let source = [newPassword, userId]
-  return await query(sql.edit, source)
+  return await query(sql.edit, [newPassword, userId])
 }
 
 exports.loginDao = loginDao

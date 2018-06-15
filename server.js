@@ -7,16 +7,15 @@ const register = require('./server/service/user/RegisterService')
 const statusFilter = require('./server/utils/statusFiter')
 const getUserInfo = require('./server/service/userInfo/GetUserInfoService')
 const updateUserInfo = require('./server/service/userInfo/UpdateUserInfoService')
-const test = require('./server/service/TestService')
 const getBookList = require('./server/service/book/GetBookListService')
 const addBook = require('./server/service/book/AddBookService')
 const searchBook = require('./server/service/book/SearchBookService')
+const getBookInfo = require('./server/service/book/GetBookService')
 const addToCourt = require('./server/service/court/AddBookToCourt')
 const deleteBook = require('./server/service/court/DeleteBookService')
 const getCourt = require('./server/service/court/GetCourtService')
 const purchase = require('./server/service/court/PurchaseService')
 const login = require('./server/service/user/LoginService')
-const getBookInfo = require('./server/service/book/GetBookService')
 const editBookCourtCount = require('./server/service/court/EditBookCourtCount')
 const addBill = require('./server/service/bill/AddBillService')
 const getBill = require('./server/service/bill/GetBillService')
@@ -77,9 +76,6 @@ router
       })
     }
   })
-  .get('/test', async (ctx) => {
-    ctx.body = await test(1)
-  })
   .get('/bookList', async (ctx) => {
     ctx.body = await getBookList()
   })
@@ -94,10 +90,9 @@ router
     let data = ctx.request.body
     ctx.body = await addToCourt(ctx.request.userId, data.bookId)
   })
-  .get('/book/info', async (ctx) => {
-    ctx.body = {
-      name: 123
-    }
+  .get('/book/:id', async (ctx) => {
+    console.log(ctx.request)
+    ctx.body = await getBookInfo(ctx.request.body.bookId)
   })
   .get('/court/list', async (ctx) => {
     ctx.body = await getCourt(ctx.request.userId)

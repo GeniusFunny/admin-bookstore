@@ -1,4 +1,5 @@
 const query = require('../utils/query')
+
 const sql = {
   addBookToCourt: `
     INSERT INTO court(userId, bookId, count)
@@ -33,111 +34,35 @@ const sql = {
 }
 
 async function editBookCourtCount (newCount, userId, bookId) {
-  let source = [newCount, userId, bookId]
-  let data = {
-    status: 0,
-    message: 'SUCCESS'
-  }
-  try {
-    await query(sql.editBookCourtCount, source)
-  } catch (e) {
-    data = {
-      status: 1,
-      message: 'FAILURE'
-    }
-  }
-  return data
+  return  await query(sql.editBookCourtCount, [newCount, userId, bookId])
 }
 
 async function findBook(userId, bookId) {
-  let source = [userId, bookId]
-  let data = await query(sql.findBookInCourt, source)
-  return data.length !== 0
+  return await query(sql.findBookInCourt, [userId, bookId])
 }
 
 async function addBookToCourt(userId, bookId) {
-  let source = [userId, bookId]
-  let isExisting
-  let data = {
-    status: 1,
-    message: '加入购物车失败'
-  }
-  try {
-    isExisting = await findBook(userId, bookId)
-  } catch (e) {
-    console.error('查询失败')
-  }
-  if (isExisting) {
-    try {
-      await query(sql.updateBookCourtCount, source)
-      data = {
-        status: 0,
-        message: 'SUCCESS'
-      }
-    } catch (e) {
-      console.error('更新失败', e)
-    }
-  } else {
-    try {
-      await query(sql.addBookToCourt, source)
-      data = {
-        status: 0,
-        message: 'SUCCESS'
-      }
-    } catch (e) {
-      console.error('插入失败', e)
-    }
-  }
-  return data
+  return await query(sql.addBookToCourt, [userId, bookId])
 }
 
 async function getCourt(userId) {
-  let source = [userId]
-  let data = {
-    status: 1,
-    message: '获取购物车列表失败'
-  }
-  try {
-    let res = await query(sql.getCourt, source)
-    data = {
-      status: 0,
-      message: 'SUCCESS',
-      data: res
-    }
-  } catch (e) {
-    console.error(e, '查询失败')
-  }
-  return data
+  return await query(sql.getCourt, [userId])
 }
 
 async function purchase(userId) {
-  let source = []
-  source.push(userId)
-  let data = await query(sql.purchase, source)
-  return data
+  return await query(sql.purchase, [userId])
 }
 
 async function deleteBook(userId, bookId) {
-  let source = [userId, bookId]
-  let res = {
-    status: 0,
-    message: 'SUCCESS'
-  }
-  try {
-    let data = await query(sql.delete, source)
-    console.log(data)
-  } catch (e) {
-    console.error(e)
-    res = {
-      status: 1,
-      message: 'FAILURE'
-    }
-  }
-  return res
+  return await query(sql.delete, [userId, bookId])
 }
-
+async function updateBookCount(userId, bookId) {
+  return await query(sql.updateBookCourtCount, [userId, bookId])
+}
 exports.addBookToCourtDao = addBookToCourt
 exports.getCourtDao = getCourt
 exports.purchaseDao = purchase
 exports.deleteBookDao = deleteBook
 exports.editBookCourtCountDao = editBookCourtCount
+exports.findBookDao = findBook
+exports.updateBookCount = updateBookCount
