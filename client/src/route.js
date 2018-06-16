@@ -35,6 +35,23 @@ const routes = [
     isPublic: false
   }
 ]
+const ManagementRoute = ({component: Component, role, ...rest}) => (
+  <Route
+    {...rest}
+    render={props =>
+      role === 2 ? (
+        <Component {...props}/>
+      ) : (
+        <Redirect
+          to={{
+            pathname: '/login',
+            state: {from: props.location}
+          }}
+        />
+      )
+    }
+  />
+)
 const PrivateRoute = ({ component: Component, isAuth, ...rest}) => (
   <Route
     {...rest}
@@ -54,5 +71,6 @@ const PrivateRoute = ({ component: Component, isAuth, ...rest}) => (
 )
 export {
   routes,
-  PrivateRoute
+  PrivateRoute,
+  ManagementRoute
 }

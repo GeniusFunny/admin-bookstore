@@ -13,9 +13,9 @@ const loginFailure = () => ({
 const asyncLoginOut = () => dispatch => {
   dispatch(loginOut())
 }
-const receiveUserInfo = (username) => ({
+const receiveUserInfo = (data) => ({
   type: LOGIN_SUCCESS,
-  username
+  data
 })
 const asyncLoginIn = (data) => dispatch => {
   dispatch(login())

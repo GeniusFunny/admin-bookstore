@@ -46,6 +46,12 @@ const config_methods = {
       method: 'GET',
       url: `${baseUrl}/${url}${config_restful(data)}`
     }
+  },
+  DELETE_RESTFUL: (url, data) => {
+    return {
+      method: 'DELETE',
+      url: `${baseUrl}/${url}${config_restful(data)}`
+    }
   }
 }
 /*  默认的请求配置 */

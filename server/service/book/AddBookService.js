@@ -1,15 +1,17 @@
 const insertBookDao = require('../../dao/book').insertBookDao
-
-async function addBookService(bookName, author, price) {
+async function addBookService(bookName, author, price, image) {
   let res = {
     status: 1,
     message: 'FAILURE'
   }
   try {
-    await insertBookDao(bookName, author, price)
+    let data = await insertBookDao(bookName, author, price, image)
     res = {
       status: 1,
-      message: 'SUCCESS'
+      message: 'SUCCESS',
+      data: {
+        bookId: data.insertId
+      }
     }
   } catch (e) {
     console.error(e)

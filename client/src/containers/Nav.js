@@ -9,7 +9,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import NavList from '../components/List'
-import {routes, PrivateRoute} from '../route'
+import {routes, PrivateRoute, ManagementRoute} from '../route'
 import {GetBooksInCourt} from '../api/Api'
 import Login from './LoginForm'
 import Register from './RegisterForm'
@@ -138,7 +138,8 @@ class Nav extends Component {
             <div className={classes.toolbar} />
             {
               routes.map(item => (
-                item.isPublic ? <Route path={item.path} component={item.component} key={item.path}/> : <PrivateRoute path={item.path} component={item.component} key={item.path} isAuth={isAuth}/>
+                item.isPublic ?
+                  <Route path={item.path} component={item.component} key={item.path}/> : <PrivateRoute path={item.path} component={item.component} key={item.path} isAuth={isAuth}/>
               ))
             }
             <Route

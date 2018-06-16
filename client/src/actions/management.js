@@ -38,11 +38,11 @@ const deleteBook = (bookId) => ({
   type: DELETE_BOOK_MANAGEMENT,
   bookId
 })
-const asyncDeleteBook = (bookId) => dispatch => {
-  DeleteBookManagement(bookId)
+const asyncDeleteBook = (data) => dispatch => {
+  DeleteBookManagement(data)
     .then(res => {
       dispatch(receiveResponseStatus(res.status))
-      dispatch(deleteBook(bookId))
+      dispatch(deleteBook(data.bookId))
     })
     .catch(err => {
       dispatch(requestFailure(err))

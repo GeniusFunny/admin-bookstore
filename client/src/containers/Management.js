@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import {connect} from 'react-redux'
 import {withStyles} from '@material-ui/core/styles'
 import {Tabs, Tab, AppBar} from '@material-ui/core'
-import BillManagement from '../components/BillManagement'
-import BookManagement from '../components/BookManagement'
-import UserManagement from '../components/UserManagement'
+import BillManagement from './BillManagement'
+import BookManagement from './BookManagement'
+import UserManagement from './UserManagement'
 import {
   asyncGetUsers,
   asyncEditBill,
@@ -40,7 +40,7 @@ class Management extends Component {
     })
   }
   render () {
-    const {classes} = this.props
+    const {classes, addBook, editBook, deleteBook, findBook, editBill} = this.props
     const {tab, keyWord} = this.state
     const {userList, billList, bookList} = this.props.state
     return (
@@ -57,8 +57,8 @@ class Management extends Component {
           </Tabs>
         </AppBar>
         <main>
-          {tab === 0 && <BookManagement bookList={bookList}/>}
-          {tab === 1 && <BillManagement billList={billList}/>}
+          {tab === 0 && <BookManagement bookList={bookList} addBook={addBook} editBook={editBook} deleteBook={deleteBook} findBook={findBook} keyWord={keyWord}/>}
+          {tab === 1 && <BillManagement billList={billList} editBill={editBill}/>}
           {tab === 2 && <UserManagement userList={userList}/>}
         </main>
       </article>
@@ -81,13 +81,18 @@ const dispatchMapToProps = (dispatch) => ({
   findBook: (keyWord) => dispatch(asyncFindBook(keyWord)),
   getBookList: () => dispatch(asyncGetBookList()),
   getUserList: () => dispatch(asyncGetUsers()),
-  getBillList: () => dispatch(asyncGetBill())
+  getBillList: () => dispatch(asyncGetBill()),
+  editBill: (billId) => dispatch(asyncEditBill(billId))
 })
 Management.propTypes = {
   addBook: PropTypes.func.isRequired,
   editBook: PropTypes.func.isRequired,
   deleteBook: PropTypes.func.isRequired,
   findBook: PropTypes.func.isRequired,
+  getBookList: PropTypes.func.isRequired,
+  getUserList: PropTypes.func.isRequired,
+  getBillList: PropTypes.func.isRequired,
+  editBill: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired
 }

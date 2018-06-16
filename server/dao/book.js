@@ -6,8 +6,8 @@ const sql = {
     FROM book
   `,
   insert: `
-    INSERT INTO book(bookName, author, price)
-      VALUES(?, ?, ?)
+    INSERT INTO book(bookName, author, price, image)
+      VALUES(?, ?, ?, ?)
   `,
   delete: `
     DELETE FROM book
@@ -22,6 +22,14 @@ const sql = {
     SELECT *
     FROM book
     WHERE bookId=?
+  `,
+  update: `
+    UPDATE book SET
+      bookName=?,
+      author=?,
+      price=?,
+      image=?
+    WHERE bookId=?
   `
 }
 
@@ -34,8 +42,8 @@ async function getBookDao (bookId) {
 
 }
 
-async function insertBookDao(bookName, author, price) {
-  return await query(sql.insert, [bookName, author, price])
+async function insertBookDao(bookName, author, price, image) {
+  return await query(sql.insert, [bookName, author, price, image])
 }
 
 async function deleteBookDao(bookId) {
@@ -45,10 +53,13 @@ async function deleteBookDao(bookId) {
 async function searchBookDao(bookName, author) {
   return await query(sql.search, [bookName, author])
 }
-
+async function updateBookDao(bookName, author, price, image, bookId) {
+  return await query(sql.update, [bookName, author, price, image, bookId])
+}
 exports.insertBookDao = insertBookDao
 exports.getBookListDao = getBookListDao
 exports.deleteBookDao = deleteBookDao
 exports.seacrchBookDao = searchBookDao
 exports.getBookDao = getBookDao
+exports.updateBookDao = updateBookDao
 

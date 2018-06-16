@@ -9,6 +9,7 @@ const getUserInfo = require('./server/service/userInfo/GetUserInfoService')
 const updateUserInfo = require('./server/service/userInfo/UpdateUserInfoService')
 const getBookList = require('./server/service/book/GetBookListService')
 const addBook = require('./server/service/book/AddBookService')
+const updateBook = require('./server/service/book/UpdateBookService')
 const searchBook = require('./server/service/book/SearchBookService')
 const getBookInfo = require('./server/service/book/GetBookService')
 const addToCourt = require('./server/service/court/AddBookToCourt')
@@ -22,6 +23,7 @@ const getBill = require('./server/service/bill/GetBillService')
 const getBillListManagement = require('./server/service/management/GetBillListService')
 const getUserListManagement = require('./server/service/management/GetUserListService')
 const getBookListManagement = require('./server/service/management/GetBookListService')
+const deleteBookManagement = require('./server/service/book/DeleteBookService')
 const app = new Koa()
 const router = new Router()
 const port = process.env.PORT || 5000
@@ -66,7 +68,7 @@ app.use(async (ctx, next) => {
     }
   })
 router
-  .post('/register', async (ctx, next) => {
+  .post('/register', async (ctx) => {
     let data = ctx.request.body
     ctx.body = await register(data.phone, data.password)
   })
@@ -125,6 +127,17 @@ router
   })
   .get('/management/userList', async (ctx) => {
     ctx.body = await getUserListManagement()
+  })
+  .post('/management/book', async (ctx) => {
+    let data = ctx.request.body
+    if (data.bookId === -1) {
+      ctx.body = await addBook(data.bookName, data.author, data.price, data.image)
+    } else {
+      ctx.body = await updateBook(data.bookName, data.author, data.price, data.image, data.bookId)
+    }
+  })
+  .delete('/management/book/:id', async (ctx) => {
+      ctx.body = await deleteBookManagement(ctx.params.id)
   })
 
 app

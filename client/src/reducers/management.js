@@ -19,7 +19,7 @@ const management = (state = {
     case GET_BOOK_LIST_MANAGEMENT:
       return Object.assign({}, state, {bookList: action.data})
     case ADD_BOOK_MANAGEMENT:
-      return Object.assign({}, state, {bookList: state.bookList.push(action.data)})
+      return Object.assign({}, state, {bookList: state.bookList.concat(action.data)})
     case EDIT_BOOK_MANAGEMENT:
       return Object.assign({}, state, {bookList: state.bookList.map(item => {
         if (item.bookId === action.data.bookId) {
