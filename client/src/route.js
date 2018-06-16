@@ -11,28 +11,32 @@ const routes = [
     component: Management,
     icon: Dashboard,
     sideBarName: '书店管理',
-    isPublic: true
+    isPublic: false,
+    isManagement: true
   },
   {
     path: '/bookList',
     component: BookList,
     icon: LibraryBooks,
     sideBarName: '图书市场',
-    isPublic: true
+    isPublic: true,
+    isManagement: false
   },
   {
     path: '/court',
     component: Court,
     icon: ShoppingCart,
     sideBarName: '购物车',
-    isPublic: false
+    isPublic: false,
+    isManagement: false
   },
   {
     path: '/personalCenter',
     component: PersonalCenter,
     icon: Person,
     sideBarName: '个人中心',
-    isPublic: false
+    isPublic: false,
+    isManagement: false
   }
 ]
 const ManagementRoute = ({component: Component, role, ...rest}) => (

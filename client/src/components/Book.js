@@ -2,20 +2,22 @@ import React from 'react'
 import {withStyles} from '@material-ui/core/styles'
 import {Card, CardActions, CardContent, CardMedia, Typography, IconButton} from '@material-ui/core'
 import AddShoppingCart from '@material-ui/icons/AddShoppingCart'
-import Info from '@material-ui/icons/InfoOutline'
+import {StarBorder} from '@material-ui/icons'
 import PropTypes from 'prop-types'
 
 const styles = (theme) => ({
   root: {
-    padding: '10px'
+    padding: 15
   },
   card: {
+    display: 'flex',
+    flexFlow: 'column nowrap',
+    justifyContent: 'center',
     width: 250,
     height: 350,
-    display: 'flex',
     paddingTop: 40,
     paddingLeft: 30,
-    flexFlow: 'column nowrap',
+    borderRadius: 20
   },
   media: {
     height: 200,
@@ -78,11 +80,11 @@ const Book = (props) => {
               onClick={courtIconClick}
             />
           </IconButton>
-          {/*<IconButton*/}
-            {/*color="primary"*/}
-          {/*>*/}
-            {/*<Info/>*/}
-          {/*</IconButton>*/}
+          <IconButton>
+            <StarBorder
+              color="primary"
+            />
+          </IconButton>
         </CardActions>
       </Card>
     </div>

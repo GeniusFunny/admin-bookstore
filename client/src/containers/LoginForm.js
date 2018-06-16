@@ -68,13 +68,17 @@ class LoginForm extends Component {
     })
   }
   buttonClick = () => {
-    this.props.login({username: this.state.username.value, password: this.state.password.value})
+    this.props.onLogin({username: this.state.username.value, password: this.state.password.value})
   }
   render () {
-    const {classes, isAuth} = this.props
-    if (isAuth) {
-      console.log(this.props.location.state.from.pathname)
+    const {classes, isAuth, role} = this.props
+    if (isAuth && role === 1) {
+      if (this.props.location.state.from.pathname === '/management') {
+        return <Redirect to='/personalCenter' />
+      }
       return <Redirect to={this.props.location.state.from.pathname}/>
+    } else if (isAuth && role === 2) {
+      return <Redirect to='/management'/>
     }
     return (
       <article className={classes.root}>
@@ -106,9 +110,10 @@ class LoginForm extends Component {
   }
 }
 const stateMapToProps = (state) => ({
-  isAuth: state.login.isAuth
+  isAuth: state.login.isAuth,
+  role: state.login.data.role
 })
 const dispatchMapToProps = (dispatch) => ({
-  login: (data) => dispatch(asyncLoginIn(data))
+  onLogin: (data) => dispatch(asyncLoginIn(data))
 })
 export default connect(stateMapToProps, dispatchMapToProps)(withStyles(styles)(LoginForm))

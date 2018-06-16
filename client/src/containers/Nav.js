@@ -97,8 +97,7 @@ class Nav extends Component {
 
   render() {
     GetBooksInCourt()
-    const { classes, theme, isAuth } = this.props
-
+    const { classes, theme, isAuth, role} = this.props
     return (
       <Router>
         <div className={classes.root}>
@@ -132,14 +131,30 @@ class Nav extends Component {
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
             </div>
-            <NavList list={routes}/>
+            <NavList list={routes} role={role}/>
           </Drawer>
           <main className={classes.content}>
             <div className={classes.toolbar} />
             {
               routes.map(item => (
                 item.isPublic ?
-                  <Route path={item.path} component={item.component} key={item.path}/> : <PrivateRoute path={item.path} component={item.component} key={item.path} isAuth={isAuth}/>
+                  <Route path={item.path} component={item.component} key={item.path}/> :
+                  (
+                    item.isManagement ?
+                      <ManagementRoute
+                        role={role}
+                        path={item.path}
+                        component={item.component}
+                        key={item.path}
+                        isAuth={isAuth}
+                      /> :
+                      <PrivateRoute
+                        path={item.path}
+                        component={item.component}
+                        key={item.path}
+                        isAuth={isAuth}
+                      />
+                  )
               ))
             }
             <Route
@@ -163,8 +178,11 @@ Nav.protoTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired
 }
-const stateMapToProps = (state) => ({
-  isAuth: state.login.isAuth
-})
+const stateMapToProps = (state) => {
+  return {
+    isAuth: state.login.isAuth,
+    role: state.login.data.role
+  }
+}
 export default connect(stateMapToProps)(withStyles(styles, { withTheme: true})(Nav))
 

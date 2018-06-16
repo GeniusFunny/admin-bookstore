@@ -10,7 +10,7 @@ async function searchBookService(bookName, author) {
     res = {
       status: 1,
       message: 'SUCCESS',
-      data: data[0]
+      data: data
     }
   } catch (e) {
     console.error(e)

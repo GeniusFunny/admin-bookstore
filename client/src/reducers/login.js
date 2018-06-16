@@ -3,7 +3,7 @@ import {LOGIN_OUT, LOGIN_SUCCESS} from '../constants/actionType'
 const login = (state = {
   isAuth: false,
   data: {
-    role: 0,
+    role: 1,
     userId: 0
   }
 }, action) => {
@@ -11,7 +11,7 @@ const login = (state = {
     case LOGIN_SUCCESS:
       return Object.assign({}, state, {data: action.data, isAuth: true})
     case LOGIN_OUT:
-      return Object.assign({}, state, {isAuth: false, username: '尚未登录'})
+      return Object.assign({}, state, {isAuth: false, data: {role: 0, userId: 0}})
     default:
       return state
   }

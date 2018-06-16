@@ -14,11 +14,18 @@ const styles = () => ({
 
 const NavList = (props) => {
   const {classes, list} = props
+  const role = parseInt(props.role)
   return (
     <div className={classes.root}>
       <List component='nav'>
         {
-          list.map(item => (
+          list.filter(item => {
+            if (role === 1) {
+              return !item.isManagement
+            } else {
+              return item.isManagement
+            }
+          }).map(item => (
             <Link to={item.path} style={{textDecoration: 'none'}}>
               <ListItem button>
                 <ListItemIcon>
@@ -27,7 +34,8 @@ const NavList = (props) => {
                 <ListItemText primary={item.sideBarName}/>
               </ListItem>
             </Link>
-          ))
+            )
+          )
         }
       </List>
     </div>
