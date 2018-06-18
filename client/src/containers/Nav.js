@@ -10,9 +10,9 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import NavList from '../components/List'
 import {routes, PrivateRoute, ManagementRoute} from '../route'
-import {GetBooksInCourt} from '../api/Api'
 import Login from './LoginForm'
 import Register from './RegisterForm'
+import {loginFromLocalStorage} from '../actions/login'
 const drawerWidth = 240
 
 const styles =  theme => ({
@@ -96,7 +96,9 @@ class Nav extends Component {
   }
 
   render() {
-    GetBooksInCourt()
+    if (localStorage.getItem('userId')) {
+      this.props.onLoginFromLocalStorage()
+    }
     const { classes, theme, isAuth, role} = this.props
     return (
       <Router>
@@ -184,5 +186,8 @@ const stateMapToProps = (state) => {
     role: state.login.data.role
   }
 }
-export default connect(stateMapToProps)(withStyles(styles, { withTheme: true})(Nav))
+const dispatchMapToProps = () => dispatch => ({
+  onLoginFromLocalStorage: () => dispatch(loginFromLocalStorage())
+})
+export default connect(stateMapToProps, dispatchMapToProps)(withStyles(styles, { withTheme: true})(Nav))
 

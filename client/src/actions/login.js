@@ -21,16 +21,21 @@ const asyncLoginIn = (data) => dispatch => {
   dispatch(login())
   Login(data)
     .then(res => {
-      dispatch(receiveResponseStatus(res.status))
-      dispatch(receiveUserInfo(res.data))
+      if (res.status === 0) {
+        dispatch(receiveResponseStatus(res.status))
+        dispatch(receiveUserInfo(res.data))
+      }
     })
     .catch(err => {
       dispatch(requestFailure(err))
       dispatch(loginFailure())
     })
 }
-
+const loginFromLocalStorage = () => ({
+  type: LOGIN_SUCCESS
+})
 export {
   asyncLoginIn,
-  asyncLoginOut
+  asyncLoginOut,
+  loginFromLocalStorage
 }

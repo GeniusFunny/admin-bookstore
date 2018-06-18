@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link, BrowserRouter} from 'react-router-dom'
 import {Button} from '@material-ui/core'
 import BSInput from '../components/Input'
 import {withStyles} from '@material-ui/core/styles'
@@ -72,13 +72,18 @@ class LoginForm extends Component {
   }
   render () {
     const {classes, isAuth, role} = this.props
-    if (isAuth && role === 1) {
-      if (this.props.location.state.from.pathname === '/management') {
-        return <Redirect to='/personalCenter' />
+    if (isAuth) {
+      try {
+        if (this.props.location.state.from.pathname === '/management') {
+          return <Redirect to='/personalCenter'/>
+        } else if (role === 2) {
+          return <Redirect to='/management'/>
+        } else {
+          return <Redirect to={this.props.location.state.from.pathname}/>
+        }
+      } catch (e) {
+        return <Redirect to='/personalCenter'/>
       }
-      return <Redirect to={this.props.location.state.from.pathname}/>
-    } else if (isAuth && role === 2) {
-      return <Redirect to='/management'/>
     }
     return (
       <article className={classes.root}>
@@ -104,6 +109,7 @@ class LoginForm extends Component {
           >
             Login
           </Button>
+          <p>没有账号？前往<Link to='/register'>注册</Link></p>
         </main>
       </article>
     )

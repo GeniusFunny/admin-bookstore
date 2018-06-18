@@ -45,12 +45,12 @@ async function addBookToCourt(userId, bookId) {
   return await query(sql.addBookToCourt, [userId, bookId])
 }
 
-async function getCourt(userId) {
-  return await query(sql.getCourt, [userId])
+async function getCourt(userId, bookId) {
+  return await query(sql.getCourt, [userId, bookId])
 }
 
-async function purchase(userId) {
-  return await query(sql.purchase, [userId])
+async function purchase(userId, bookId) {
+  return await query(sql.purchase, [userId, bookId])
 }
 
 async function deleteBook(userId, bookId) {

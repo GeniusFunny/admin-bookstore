@@ -1,10 +1,9 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import {Redirect} from 'react-router-dom'
+import {Redirect, Link} from 'react-router-dom'
 import Checkbox from '@material-ui/core/Checkbox'
 import Button from '@material-ui/core/Button'
 import BSInput from '../components/Input'
-import {Register} from '../api/Api'
 import {asyncRegister} from '../actions/register'
 
 const styles = {
@@ -111,7 +110,7 @@ class RegisterForm extends Component {
     })
   }
   buttonClick = () => {
-    this.props.register(this.getInfo())
+    this.props.onRegister(this.getInfo())
   }
   checkBoxClick = () => {
     this.setState({
@@ -123,8 +122,8 @@ class RegisterForm extends Component {
     phone: parseInt(this.state.phone.value)
   })
   render() {
-    const {isAuth} = this.props
     console.log(this.props)
+    const {isAuth} = this.props
     if (isAuth) {
       return <Redirect to='/personalCenter'/>
     }
@@ -169,6 +168,9 @@ class RegisterForm extends Component {
               />
               <label style={styles.option.checkBox}>我已经阅读了<a href='/'>用户协议</a>，并且同意注册</label>
             </div>
+            <p>
+              已经注册？前往<Link to='/login'>登录</Link>
+            </p>
           </div>
         </div>
       </section>
@@ -179,6 +181,6 @@ const stateMapToProps = (state) => ({
   isAuth: state.login.isAuth
 })
 const dispatchMapToProps = (dispatch) => ({
-  register: (data) => dispatch(asyncRegister(data))
+  onRegister: (data) => dispatch(asyncRegister(data))
 })
 export default connect(stateMapToProps, dispatchMapToProps)(RegisterForm)

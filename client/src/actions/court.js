@@ -1,5 +1,5 @@
-import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt} from "../api/Api"
-import {REQUEST_PRODUCTS, RECEIVE_PRODUCTS, DELETE_BOOK, EDIT_BOOK_COUNT, COMPUTED_COURT_COUNT, COMPUTED_COURT_MONEY, SELECT_BOOK, SELECT_BOOK_ALL} from '../constants/actionType'
+import {GetBooksInCourt, EditCourtBookCount, DeleteBookFromCourt, Purchase} from "../api/Api"
+import {REQUEST_PRODUCTS, RECEIVE_PRODUCTS, DELETE_BOOK, EDIT_BOOK_COUNT, COMPUTED_COURT_COUNT, COMPUTED_COURT_MONEY, SELECT_BOOK, SELECT_BOOK_ALL, PURCHASE_SUCCESS} from '../constants/actionType'
 import {receiveResponseStatus, requestFailure} from './common'
 const requestProducts = () => ({
   type: REQUEST_PRODUCTS
@@ -55,10 +55,6 @@ const asyncDeleteBook = (bookId) => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-
-// const asyncDeleteAllBooks = () => dispatch => {
-//
-// }
 const computedCourtCount = () => ({
   type: COMPUTED_COURT_COUNT
 })
@@ -86,6 +82,24 @@ const selectBookAll = () => dispatch => {
   dispatch(computedCourtMoney())
 }
 
+const purchaseSuccess = (data) => ({
+  type: PURCHASE_SUCCESS,
+  books: data
+})
+const asyncPurchase = (data) => dispatch => {
+  Purchase(data)
+    .then(res => {
+      dispatch(receiveResponseStatus(res.status))
+      if (res.status === 0) {
+        dispatch(purchaseSuccess(data.books))
+        dispatch(computedCourtCount())
+        dispatch(computedCourtMoney())
+      }
+    })
+    .catch(err => {
+      dispatch(requestFailure(err))
+    })
+}
 export {
   getAllProducts,
   computedCourtCount,
@@ -94,4 +108,5 @@ export {
   asyncDeleteBook,
   selectBook,
   selectBookAll,
+  asyncPurchase
 }

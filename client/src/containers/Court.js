@@ -5,7 +5,7 @@ import classNames from 'classnames'
 import {Checkbox, IconButton, Table, TableBody, TableHead, TableCell, TableFooter, TableRow, Input} from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import {withStyles} from '@material-ui/core/styles'
-import {getAllProducts, asyncEditBookCount, asyncDeleteBook, selectBook, selectBookAll} from '../actions/court'
+import {getAllProducts, asyncEditBookCount, asyncDeleteBook, selectBook, selectBookAll, asyncPurchase} from '../actions/court'
 import Message from '../components/Message'
 import SelectAllIcon from '@material-ui/icons/SelectAll'
 import {ArrowForward} from '@material-ui/icons'
@@ -64,6 +64,13 @@ class Court extends Component {
   }
   selectAll = () => {
     this.props.onSelectAll()
+  }
+  purchase = () => {
+    let books = this.props.state.data.filter(item => item.isSelected).map(item => ({
+      bookId: item.bookId
+    }))
+    let money = this.props.state.totalMoney
+    this.props.onPurchase({books, money})
   }
   render () {
     const {classes, state} = this.props
@@ -135,7 +142,7 @@ class Court extends Component {
                 <TableCell>{state.totalCount || 0}</TableCell>
                 <TableCell>{state.totalMoney || 0}.00</TableCell>
                 <TableCell>
-                  <IconButton>
+                  <IconButton onClick={this.purchase}>
                     <ArrowForward/>
                   </IconButton>
                 </TableCell>
@@ -159,7 +166,8 @@ const mapDispatchToProps = (dispatch) => ({
   onEdit: (bookId, count) => dispatch(asyncEditBookCount(bookId, count)),
   onDelete: (bookId) => dispatch(asyncDeleteBook(bookId)),
   onSelect: (bookId) => dispatch(selectBook(bookId)),
-  onSelectAll: () => dispatch(selectBookAll())
+  onSelectAll: () => dispatch(selectBookAll()),
+  onPurchase: (data) => dispatch(asyncPurchase(data))
 })
 Court.propTypes = {
   classes: PropTypes.object.isRequired

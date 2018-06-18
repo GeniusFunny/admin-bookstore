@@ -14,7 +14,7 @@ async function registerService(phone, password) {
   try {
     let data = await registerDao(phone, password)
     try {
-      await insertUserInfoService(phone, `用户${data.data.userId}`, data.data.userId)
+      await insertUserInfoService(phone, `用户${data.insertId}`, data.insertId)
       res = {
         status: 0,
         message: 'SUCCESS'

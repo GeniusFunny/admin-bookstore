@@ -12,9 +12,13 @@ const registerFailure = () => ({
 const asyncRegister = (data) => dispatch => {
   Register(data)
     .then(res => {
-      dispatch(registerSuccess(res.data.userId))
+      dispatch(registerSuccess())
       dispatch(receiveResponseStatus(res.status))
-      dispatch(asyncLoginIn({username: data.phone, password: data.password}))
+      try {
+        dispatch(asyncLoginIn({username: data.phone, password: data.password}))
+      } catch (e) {
+        console.error(e)
+      }
     })
     .catch(err => {
       dispatch(registerFailure())

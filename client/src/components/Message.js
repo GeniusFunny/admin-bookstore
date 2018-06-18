@@ -56,7 +56,7 @@ class Message extends Component {
     if (open) {
       setTimeout(() => {
         close()
-      }, 3000)
+      }, 1500)
     }
     return (
       <Snackbar

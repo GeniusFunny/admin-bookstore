@@ -139,6 +139,9 @@ router
   .delete('/management/book/:id', async (ctx) => {
       ctx.body = await deleteBookManagement(ctx.params.id)
   })
+  .post('/court/purchase', async (ctx) => {
+    ctx.body = await purchase(ctx.request.userId, ctx.request.body.books, ctx.request.body.money)
+  })
 
 app
   .use(router.routes())

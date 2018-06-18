@@ -6,7 +6,7 @@ const sql = {
     WHERE userId=?
   `,
   add: `
-    INSERT INTO bill 
+    INSERT INTO bill(userId, money) 
       VALUES(?, ?)
   `
 }

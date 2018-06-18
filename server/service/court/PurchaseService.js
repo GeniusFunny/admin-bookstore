@@ -1,15 +1,18 @@
 const purchaseDao = require('../../dao/court').purchaseDao
-
-async function purchaseService(userId) {
+const addBill = require('../bill/AddBillService')
+async function purchaseService(userId, bookIds, money) {
   let res = {
     status: 1,
     message: 'FAILURE'
   }
   try {
-    await purchaseDao(userId)
-    res = {
-      status: 0,
-      message: 'SUCCESS'
+    bookIds.forEach(async item => {
+      await purchaseDao(userId, item.bookId)
+    })
+    try {
+      res = await addBill(userId, money)
+    } catch (e) {
+      console.error(e)
     }
   } catch (e) {
     console.error(e)

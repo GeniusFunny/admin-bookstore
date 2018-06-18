@@ -16,6 +16,8 @@ const styles = () => ({
     paddingBottom: 15,
     borderRadius: 20,
     minHeight: 400,
+    maxHeight: 800,
+    overflow: 'scroll',
     fontSize: 15,
     width: 400,
     boxShadow: '10px 10px 5px #888888',

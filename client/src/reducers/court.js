@@ -8,7 +8,8 @@ import {
   COMPUTED_COURT_COUNT,
   EDIT_BOOK_COUNT,
   SELECT_BOOK_ALL,
-  SELECT_BOOK
+  SELECT_BOOK,
+  PURCHASE_SUCCESS
 } from '../constants/actionType'
 
 const calcCount = (data) => {
@@ -74,6 +75,16 @@ const asyncCourt = (state = {
       return Object.assign({}, state, {totalCount: calcCount(state.data)})
     case COMPUTED_COURT_MONEY:
       return Object.assign({}, state, {totalMoney: calcMoney(state.data)})
+    case PURCHASE_SUCCESS:
+      return Object.assign({}, state, {data: state.data.filter(item => {
+        let index = -1
+          action.books.forEach(selectedBook => {
+            if (selectedBook.bookId === item.bookId) {
+              index = 1
+            }
+          })
+          return index === -1
+        })})
     default:
       return state
   }
