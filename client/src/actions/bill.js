@@ -1,11 +1,10 @@
 import {GET_BILL} from "../constants/actionType"
 import {receiveResponseStatus, requestFailure} from './common'
 import {GetUserBill} from "../api/Api"
+import makeActionCreator from './actionCreator'
 
-const getBill = (billList) => ({
-  type: GET_BILL,
-  billList
-})
+
+const getBill = makeActionCreator(GET_BILL, 'billList')
 
 const asyncGetBill = () => dispatch => {
   GetUserBill()

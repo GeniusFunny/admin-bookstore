@@ -19,11 +19,17 @@ import {
   AddBookManagement,
   GetBookListManagement
 } from '../api/Api'
-import BookList from "../containers/BookList";
-const findBook = (data) => ({
-  type: FIND_BOOK_MANAGEMENT,
-  data
-})
+import makeActionCreator from './actionCreator'
+
+const findBook = makeActionCreator(FIND_BOOK_MANAGEMENT, 'data')
+const deleteBook = makeActionCreator(DELETE_BOOK_MANAGEMENT, 'bookId')
+const editBook = makeActionCreator(EDIT_BOOK_MANAGEMENT, 'data')
+const addBook = makeActionCreator(ADD_BOOK_MANAGEMENT, 'data')
+const getBook = makeActionCreator(GET_BOOK_LIST_MANAGEMENT, 'data')
+const getBill = makeActionCreator(GET_BILL_LIST_MANAGEMENT, 'data')
+const getUsers = makeActionCreator(GET_USER_LIST_MANAGEMENT, 'data')
+const editBill = makeActionCreator(EDIT_BILL_MANAGEMENT, 'billId')
+
 const asyncFindBook = (keyWord) => dispatch => {
   FindBookManagement(keyWord)
     .then(res => {
@@ -34,10 +40,6 @@ const asyncFindBook = (keyWord) => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const deleteBook = (bookId) => ({
-  type: DELETE_BOOK_MANAGEMENT,
-  bookId
-})
 const asyncDeleteBook = (data) => dispatch => {
   DeleteBookManagement(data)
     .then(res => {
@@ -48,10 +50,6 @@ const asyncDeleteBook = (data) => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const editBook = (data) => ({
-  type: EDIT_BOOK_MANAGEMENT,
-  data
-})
 const asyncEditBook = (data) => dispatch => {
   EditBookManagement(data)
     .then(res => {
@@ -62,10 +60,7 @@ const asyncEditBook = (data) => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const addBook = (data) => ({
-  type:ADD_BOOK_MANAGEMENT,
-  data
-})
+
 const asyncAddBook = (data) => dispatch => {
   AddBookManagement(data)
     .then(res => {
@@ -76,10 +71,7 @@ const asyncAddBook = (data) => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const getBook = (data) => ({
-  type: GET_BOOK_LIST_MANAGEMENT,
-  data
-})
+
 const asyncGetBookList = () => dispatch => {
   GetBookListManagement()
     .then(res => {
@@ -91,10 +83,7 @@ const asyncGetBookList = () => dispatch => {
     })
 
 }
-const getBill = (data) => ({
-  type: GET_BILL_LIST_MANAGEMENT,
-  data
-})
+
 const asyncGetBill = () => dispatch => {
   GetBillListManagement()
     .then(res => {
@@ -105,10 +94,7 @@ const asyncGetBill = () => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const getUsers = (data) => ({
-  type: GET_USER_LIST_MANAGEMENT,
-  data
-})
+
 const asyncGetUsers = () => dispatch => {
   GetUserListManagement()
     .then(res => {
@@ -119,10 +105,7 @@ const asyncGetUsers = () => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-const editBill = (billId) => ({
-  type: EDIT_BILL_MANAGEMENT,
-  billId
-})
+
 const asyncEditBill = (billId) => dispatch => {
   EditBillManagement(billId)
     .then(res => {

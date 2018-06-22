@@ -1,11 +1,9 @@
 import {GET_USER_INFO} from '../constants/actionType'
 import {GetUserInfo} from '../api/Api'
 import {requestFailure, receiveResponseStatus} from './common'
+import makeActionCreator from './actionCreator'
 
-const getUserInfo = (info) => ({
-  type: GET_USER_INFO,
-  info
-})
+const getUserInfo = makeActionCreator(GET_USER_INFO, 'info')
 
 const asyncGetUserInfo = () => dispatch => {
   GetUserInfo()

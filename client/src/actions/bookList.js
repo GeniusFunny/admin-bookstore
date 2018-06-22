@@ -8,19 +8,17 @@ import {
 } from '../constants/actionType'
 import {requestFailure, receiveResponseStatus} from './common'
 import {AddBookToCourt, SearchBook, GetBookList} from '../api/Api'
+import makeActionCreator from './actionCreator'
 
-const getBookList = (data) => ({
-  type: GET_BOOK_MARKET,
-  data: data
-})
-const addBookSuccess = (message) => ({
-  type: ADD_BOOK_TO_COURT_SUCCESS,
-  message
-})
-const addBookFailure = (message) => ({
-  type: ADD_BOOK_TO_COURT_FAILURE,
-  message
-})
+const getBookList = makeActionCreator(GET_BOOK_MARKET, 'data')
+const addBookSuccess = makeActionCreator(ADD_BOOK_TO_COURT_SUCCESS, 'message')
+const addBookFailure = makeActionCreator(ADD_BOOK_TO_COURT_FAILURE, 'message')
+const addBookToCourt = makeActionCreator(ADD_BOOK_TO_COURT, 'bookId')
+const updateKeyWord = makeActionCreator(UPDATE_KEYWORD, 'keyWord')
+const closeMessage = makeActionCreator(CLOSE_MESSAGE)
+const searchBook = makeActionCreator(SEARCH_BOOK, 'keyWord')
+const getSearchBookRes = makeActionCreator(GET_BOOK_SEARCH_RES, 'data')
+
 const asyncGetBookList = () => dispatch => {
   GetBookList()
     .then(res => {
@@ -31,11 +29,6 @@ const asyncGetBookList = () => dispatch => {
       dispatch(requestFailure(err))
     })
 }
-
-const addBookToCourt = (bookId) => ({
-  type: ADD_BOOK_TO_COURT,
-  bookId: bookId
-})
 const asyncAddBookToCourt = (bookId) => dispatch => {
   dispatch(addBookToCourt(bookId))
   AddBookToCourt({bookId: bookId})
@@ -48,7 +41,7 @@ const asyncAddBookToCourt = (bookId) => dispatch => {
           type: 'success'
         }))
       } else {
-        dispatch(addBookSuccess({
+        dispatch(addBookFailure({
           open: true,
           message: '加入购物车失败',
           type: 'error'
@@ -64,21 +57,6 @@ const asyncAddBookToCourt = (bookId) => dispatch => {
       }))
     })
 }
-const updateKeyWord = (keyWord) => ({
-  type: UPDATE_KEYWORD,
-  keyWord
-})
-const closeMessage = () => ({
-  type: CLOSE_MESSAGE
-})
-const searchBook = (keyWord) => ({
-  type: SEARCH_BOOK,
-  keyWord
-})
-const getSearchBookRes = (data) => ({
-  type: GET_BOOK_SEARCH_RES,
-  data: data
-})
 const asyncSearchBook = (keyWord) => dispatch => {
   dispatch(searchBook(keyWord))
   SearchBook({keyWord: keyWord})

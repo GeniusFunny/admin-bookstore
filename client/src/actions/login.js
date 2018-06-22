@@ -1,22 +1,17 @@
 import {LOGIN_IN, LOGIN_FAILURE, LOGIN_OUT, LOGIN_SUCCESS} from '../constants/actionType'
 import {requestFailure, receiveResponseStatus} from '../actions/common'
 import {Login} from '../api/Api'
-const login = () => ({
-  type: LOGIN_IN
-})
-const loginOut = () => ({
-  type: LOGIN_OUT
-})
-const loginFailure = () => ({
-  type: LOGIN_FAILURE
-})
+import makeActionCreator from './actionCreator'
+
+const login = makeActionCreator(LOGIN_IN)
+const loginOut = makeActionCreator(LOGIN_OUT)
+const loginFailure = makeActionCreator(LOGIN_FAILURE)
+const loginFromLocalStorage = makeActionCreator(LOGIN_SUCCESS)
+const receiveUserInfo = makeActionCreator(LOGIN_SUCCESS, 'data')
+
 const asyncLoginOut = () => dispatch => {
   dispatch(loginOut())
 }
-const receiveUserInfo = (data) => ({
-  type: LOGIN_SUCCESS,
-  data
-})
 const asyncLoginIn = (data) => dispatch => {
   dispatch(login())
   Login(data)
@@ -31,9 +26,6 @@ const asyncLoginIn = (data) => dispatch => {
       dispatch(loginFailure())
     })
 }
-const loginFromLocalStorage = () => ({
-  type: LOGIN_SUCCESS
-})
 export {
   asyncLoginIn,
   asyncLoginOut,
